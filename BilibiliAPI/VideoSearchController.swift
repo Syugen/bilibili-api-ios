@@ -10,27 +10,39 @@ import UIKit
 
 class VideoSearchController: UIViewController, UISearchBarDelegate {
     
-    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var content: UILabel!
+    let searchBar = UISearchBar()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        searchBar.delegate = self
+        self.navigationItem.titleView = searchBar
+        searchBar.keyboardType = UIKeyboardType.numberPad
         searchBar.becomeFirstResponder()
+        if #available(iOS 11.0, *) {
+            searchBar.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        }
         
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        let searchButton = UIBarButtonItem(title: "Search", style: .plain, target: self, action: #selector(searchPressed))
+        self.navigationItem.setRightBarButton(searchButton, animated: true)
     }
     
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    @objc func searchPressed(_ sender: Any) {
         searchBar.resignFirstResponder()
         content.text = "Searching " + searchBar.text!
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        if self.isMovingFromParentViewController {
+            // Your code...
+            searchBar.resignFirstResponder()
+            searchBar.isHidden = true
+        }
+    }
+    
     /*
     // MARK: - Navigation
 
