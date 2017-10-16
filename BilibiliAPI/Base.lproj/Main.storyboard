@@ -13,7 +13,7 @@
         <!--Video-->
         <scene sceneID="Kdt-qU-Qnt">
             <objects>
-                <viewController id="flD-qJ-AOa" customClass="VideoTabController" customModule="BilibiliAPI" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="flD-qJ-AOa" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="gVM-ch-JUy">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -32,7 +32,7 @@
                                                 </constraints>
                                             </imageView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4hc-n5-ghI">
-                                                <rect key="frame" x="0.0" y="127" width="320" height="40"/>
+                                                <rect key="frame" x="20" y="127" width="280" height="40"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Search a Video" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="skL-A3-fRV">
                                                         <rect key="frame" x="8" y="8" width="116" height="21"/>
@@ -41,25 +41,34 @@
                                                         <color key="textColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
+                                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="h3i-uM-FpQ">
+                                                        <rect key="frame" x="0.0" y="0.0" width="280" height="40"/>
+                                                        <connections>
+                                                            <segue destination="ZWy-uc-HdY" kind="show" id="lSq-gO-Pbd"/>
+                                                        </connections>
+                                                    </button>
                                                 </subviews>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <gestureRecognizers/>
                                                 <constraints>
+                                                    <constraint firstItem="h3i-uM-FpQ" firstAttribute="leading" secondItem="4hc-n5-ghI" secondAttribute="leading" id="6Tb-X0-V6q"/>
+                                                    <constraint firstAttribute="bottom" secondItem="h3i-uM-FpQ" secondAttribute="bottom" id="8zT-FV-2if"/>
+                                                    <constraint firstAttribute="trailing" secondItem="h3i-uM-FpQ" secondAttribute="trailing" id="UAi-9P-s7a"/>
                                                     <constraint firstAttribute="height" constant="40" id="rrz-RN-1ki"/>
+                                                    <constraint firstItem="h3i-uM-FpQ" firstAttribute="top" secondItem="4hc-n5-ghI" secondAttribute="top" id="t9f-JN-ZIo"/>
                                                 </constraints>
                                                 <connections>
                                                     <outletCollection property="gestureRecognizers" destination="rOE-Rw-9m9" appends="YES" id="nKq-WT-KQT"/>
                                                 </connections>
                                             </view>
                                         </subviews>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstItem="4hc-n5-ghI" firstAttribute="centerX" secondItem="Ho2-IP-4qX" secondAttribute="centerX" id="4RJ-6V-LmG"/>
                                             <constraint firstAttribute="height" constant="180" id="5HT-wK-IDy"/>
+                                            <constraint firstItem="4hc-n5-ghI" firstAttribute="leading" secondItem="Ho2-IP-4qX" secondAttribute="leading" constant="20" id="Do3-cg-q9p"/>
                                             <constraint firstItem="4hc-n5-ghI" firstAttribute="top" secondItem="VTy-FS-dZB" secondAttribute="bottom" constant="20" id="UGh-KX-DK0"/>
                                             <constraint firstItem="VTy-FS-dZB" firstAttribute="top" secondItem="Ho2-IP-4qX" secondAttribute="top" constant="20" id="Zkd-Wc-5iQ"/>
                                             <constraint firstItem="VTy-FS-dZB" firstAttribute="centerX" secondItem="Ho2-IP-4qX" secondAttribute="centerX" id="cJu-to-fU6"/>
-                                            <constraint firstItem="4hc-n5-ghI" firstAttribute="width" secondItem="Ho2-IP-4qX" secondAttribute="width" id="t9d-VR-siN"/>
                                         </constraints>
                                     </view>
                                 </subviews>
@@ -88,39 +97,38 @@
             </objects>
             <point key="canvasLocation" x="1466.25" y="-317.5"/>
         </scene>
-        <!--View Controller-->
-        <scene sceneID="ebX-bV-isq">
+        <!--Video Search Controller-->
+        <scene sceneID="unK-FB-cvg">
             <objects>
-                <viewController id="qIa-GE-R3q" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="O6K-Wu-ca2">
+                <viewController id="ZWy-uc-HdY" customClass="VideoSearchController" customModule="BilibiliAPI" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="R1v-Gr-uKR">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <searchBar contentMode="redraw" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="RQA-Km-tco">
+                                <rect key="frame" x="0.0" y="64" width="320" height="56"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </searchBar>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cGy-2o-5gC">
+                                <rect key="frame" x="0.0" y="120" width="320" height="48"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="FvJ-0e-Dey"/>
+                        <viewLayoutGuide key="safeArea" id="Rhn-SB-yvx"/>
                     </view>
                     <connections>
-                        <outlet property="searchDisplayController" destination="7vL-Nz-YAL" id="Ps0-cW-Oib"/>
+                        <outlet property="content" destination="cGy-2o-5gC" id="SFQ-uB-tyX"/>
+                        <outlet property="searchBar" destination="RQA-Km-tco" id="YyE-D1-crS"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="hVc-8h-iRu" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="LTq-4X-9Cm">
-                    <connections>
-                        <outlet property="delegate" destination="qIa-GE-R3q" id="WVu-3R-2GC"/>
-                        <outlet property="searchContentsController" destination="qIa-GE-R3q" id="7wZ-eR-br6"/>
-                        <outlet property="searchResultsDataSource" destination="qIa-GE-R3q" id="swv-te-gMf"/>
-                        <outlet property="searchResultsDelegate" destination="qIa-GE-R3q" id="U1d-fg-kaQ"/>
-                    </connections>
-                </searchDisplayController>
-                <searchDisplayController id="7vL-Nz-YAL">
-                    <connections>
-                        <outlet property="delegate" destination="qIa-GE-R3q" id="ejg-Z6-s5D"/>
-                        <outlet property="searchContentsController" destination="qIa-GE-R3q" id="uS3-Mk-ct9"/>
-                        <outlet property="searchResultsDataSource" destination="qIa-GE-R3q" id="tx3-ha-jSM"/>
-                        <outlet property="searchResultsDelegate" destination="qIa-GE-R3q" id="1PM-bf-4uG"/>
-                    </connections>
-                </searchDisplayController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uHe-ue-jfZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2193" y="-316"/>
+            <point key="canvasLocation" x="2214.375" y="-318.75"/>
         </scene>
         <!--Video Navigation-->
         <scene sceneID="RZb-UT-C8d">
@@ -155,7 +163,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="HuB-VB-40B" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="0.0" y="0.0"/>
+            <point key="canvasLocation" x="1" y="-12"/>
         </scene>
     </scenes>
     <resources>
