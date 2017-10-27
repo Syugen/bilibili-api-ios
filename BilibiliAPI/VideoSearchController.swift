@@ -10,7 +10,11 @@ import UIKit
 
 class VideoSearchController: UIViewController, UISearchBarDelegate {
     
+    @IBOutlet weak var videoName: UILabel!
+    @IBOutlet weak var upName: UILabel!
     @IBOutlet weak var content: UILabel!
+    @IBOutlet weak var videoImage: UIImageView!
+    @IBOutlet weak var upImage: UIImageView!
     let searchBar = UISearchBar()
     
     override func viewDidLoad() {
@@ -30,22 +34,16 @@ class VideoSearchController: UIViewController, UISearchBarDelegate {
     
     @objc func searchPressed(_ sender: UIBarButtonItem) {
         self.searchBar.resignFirstResponder()
-        self.content.text = "Searching " + searchBar.text!
-        let url = URL(string: "https://api.bilibili.com/archive_stat/stat?aid=" + self.searchBar.text!)
+        self.videoName.text = "Searching " + searchBar.text!
+        let url = URL(string: "http://bili.utoptutor.com/biliapi_videoinfo?aid=" + self.searchBar.text!)
         let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
             
             if let data = data {
                 do {
                     // Convert the data to JSON
-                    let jsonSerialized = try JSONSerialization.jsonObject(with: data, options: []) as? [String : Any]
+                    let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String : Any]
+                    self.displayInfo(json)
                     
-                    // The following is just a playground
-                    if let json = String(data: data, encoding: .utf8) {
-                        print(json)
-                        DispatchQueue.main.async(execute: {
-                            self.content.text = json
-                        })
-                    }
                 }  catch let error as NSError {
                     print(error.localizedDescription)
                 }
@@ -56,14 +54,48 @@ class VideoSearchController: UIViewController, UISearchBarDelegate {
         task.resume()
     }
     
+    func displayInfo(_ json: [String : Any]) {
+        let jiji = json["jiji"] as! [String : Any]
+        let web = json["web"] as! [String : Any]
+        
+        DispatchQueue.main.async(execute: {
+            if json["code"] as! Int != 0 {
+                self.videoName.text = "Video not found"
+                return
+            }
+            if web["error"] as! Bool == true {
+                self.videoName.text = jiji["title"] as? String
+                self.upName.text = "Uploader: " + (jiji["up"] as! String)
+                let upimgurl = URL(string: jiji["upimg"] as! String)
+                let upimg = try? Data(contentsOf: upimgurl!)
+                self.upImage.image = UIImage(data: upimg!)
+            } else {
+                self.videoName.text = web["title"] as? String
+                self.upName.text = "Uploader: " + (web["upName"] as! String)
+                let upimgurl = URL(string: web["upAvatar"] as! String)
+                let upimg = try? Data(contentsOf: upimgurl!)
+                self.upImage.image = UIImage(data: upimg!)
+            }
+            let imgurl = URL(string: jiji["img"] as! String)
+            let img = try? Data(contentsOf: imgurl!)
+            self.videoImage.image = UIImage(data: img!)
+        })
+    }
+    
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         if self.isMovingFromParentViewController {
-            // Your code...
             searchBar.resignFirstResponder()
             searchBar.isHidden = true
         }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        searchBar.isHidden = false
     }
     
     /*
