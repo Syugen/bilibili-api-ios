@@ -12,6 +12,7 @@
 		186657501F92A9680001E2F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1866574F1F92A9680001E2F6 /* Assets.xcassets */; };
 		186657531F92A9680001E2F6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 186657511F92A9680001E2F6 /* LaunchScreen.storyboard */; };
 		1866575D1F93E7BB0001E2F6 /* VideoTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1866575C1F93E7BB0001E2F6 /* VideoTabController.swift */; };
+		18AB999E1FA58C9A002526A0 /* WebKitController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AB999D1FA58C9A002526A0 /* WebKitController.swift */; };
 		18FDBF151F94270E00F95B9C /* VideoSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FDBF141F94270E00F95B9C /* VideoSearchController.swift */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +24,7 @@
 		186657521F92A9680001E2F6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		186657541F92A9680001E2F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1866575C1F93E7BB0001E2F6 /* VideoTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoTabController.swift; sourceTree = "<group>"; };
+		18AB999D1FA58C9A002526A0 /* WebKitController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebKitController.swift; sourceTree = "<group>"; };
 		18FDBF141F94270E00F95B9C /* VideoSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoSearchController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -60,6 +62,7 @@
 				1866574C1F92A9680001E2F6 /* Main.storyboard */,
 				18FDBF141F94270E00F95B9C /* VideoSearchController.swift */,
 				1866575C1F93E7BB0001E2F6 /* VideoTabController.swift */,
+				18AB999D1FA58C9A002526A0 /* WebKitController.swift */,
 				1866574F1F92A9680001E2F6 /* Assets.xcassets */,
 				186657511F92A9680001E2F6 /* LaunchScreen.storyboard */,
 				186657541F92A9680001E2F6 /* Info.plist */,
@@ -142,6 +145,7 @@
 				186657471F92A9670001E2F6 /* AppDelegate.swift in Sources */,
 				1866575D1F93E7BB0001E2F6 /* VideoTabController.swift in Sources */,
 				18FDBF151F94270E00F95B9C /* VideoSearchController.swift in Sources */,
+				18AB999E1FA58C9A002526A0 /* WebKitController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
