@@ -14,7 +14,8 @@ let DBChange = "DB_CHANGED"
 class FavoriteDB {
     static var sharedInstance = FavoriteDB()
     
-    var videos: [Int] = [170001] {
+    var videoTitles: [String] = ["asdf","asdf","asdf","asdf","asdf","asdf","asdf","asdf","asdf","asdf"]
+    var videoIDs: [String] = ["170001","170001","170001","170001","170001","170001","170001","170001","170001","170001"] {
         didSet {
             NotificationCenter.default.post(name: Notification.Name(DBChange), object: self)
         }

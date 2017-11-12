@@ -33,6 +33,7 @@ class VideoSearchController: UITableViewController, UISearchBarDelegate {
     @IBOutlet var statTable: UITableView!
     
     let searchBar = UISearchBar()
+    var searchButtonPressed = false
     var info_set = false
     var aid: String!
 
@@ -51,6 +52,10 @@ class VideoSearchController: UITableViewController, UISearchBarDelegate {
         self.navigationItem.setRightBarButton(searchButton, animated: true)
         self.statTable.isHidden = true
         reset_views()
+        if self.searchButtonPressed {
+            self.searchButtonPressed = false
+            search()
+        }
     }
     
     func reset_views() {
@@ -67,6 +72,10 @@ class VideoSearchController: UITableViewController, UISearchBarDelegate {
     }
     
     @objc func searchPressed(_ sender: UIBarButtonItem) {
+        search()
+    }
+    
+    func search() {
         self.reset_views()
         self.videoName.text = "Searching " + searchBar.text!
         self.searchBar.resignFirstResponder()
@@ -104,7 +113,7 @@ class VideoSearchController: UITableViewController, UISearchBarDelegate {
         DispatchQueue.main.async(execute: {
             self.statTable.isHidden = false
             self.aid = self.searchBar.text
-            if FavoriteDB.sharedInstance.videos.contains(Int(self.aid)!) {
+            if FavoriteDB.sharedInstance.videoIDs.contains(self.aid!) {
                 self.favoriteIcon.image = UIImage(named: "favorite")
             } else {
                 self.favoriteIcon.image = UIImage(named: "notfavorite")
