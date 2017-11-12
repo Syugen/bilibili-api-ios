@@ -1,32 +1,19 @@
 //
-//  WebKitController.swift
+//  ViewMainController.swift
 //  BilibiliAPI
 //
-//  Created by Yuan Zhou on 2017/10/29.
+//  Created by Yuan Zhou on 2017/11/12.
 //  Copyright © 2017年 Yuan Zhou. All rights reserved.
 //
 
 import UIKit
-import WebKit
 
-class WebKitController: UIViewController, WKUIDelegate {
+class ViewMainController: UITableViewController {
 
-    var webView: WKWebView!
-    var urlStr: String!
-    
-    override func loadView() {
-        let webConfiguration = WKWebViewConfiguration()
-        webView = WKWebView(frame: .zero, configuration: webConfiguration)
-        webView.uiDelegate = self
-        view = webView
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let myURL = URL(string: "https://www.bilibili.com/video/av" + self.urlStr + "/")
-        let myRequest = URLRequest(url: myURL!)
-        webView.load(myRequest)
+        // Do any additional setup after loading the view.
     }
 
     override func didReceiveMemoryWarning() {

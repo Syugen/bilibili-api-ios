@@ -19,9 +19,23 @@ class VideoSearchController: UITableViewController, UISearchBarDelegate {
     @IBOutlet weak var upsign: UILabel!
     @IBOutlet weak var videoImage: UIImageView!
     @IBOutlet weak var desc: UILabel!
+    @IBOutlet weak var viewCount: UILabel!
+    @IBOutlet weak var danmakuCount: UILabel!
+    @IBOutlet weak var replyCount: UILabel!
+    @IBOutlet weak var favoriteCount: UILabel!
+    @IBOutlet weak var coinCount: UILabel!
+    @IBOutlet weak var ShareCount: UILabel!
+    @IBOutlet weak var curRanking: UILabel!
+    @IBOutlet weak var hisRanking: UILabel!
+    @IBOutlet weak var copyright: UILabel!
+    @IBOutlet weak var favoriteIcon: UIImageView!
+    
+    @IBOutlet var statTable: UITableView!
+    
     let searchBar = UISearchBar()
     var info_set = false
-    
+    var aid: String!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -35,6 +49,7 @@ class VideoSearchController: UITableViewController, UISearchBarDelegate {
         
         let searchButton = UIBarButtonItem(title: "Search", style: .plain, target: self, action: #selector(searchPressed))
         self.navigationItem.setRightBarButton(searchButton, animated: true)
+        self.statTable.isHidden = true
         reset_views()
     }
     
@@ -55,9 +70,16 @@ class VideoSearchController: UITableViewController, UISearchBarDelegate {
         self.reset_views()
         self.videoName.text = "Searching " + searchBar.text!
         self.searchBar.resignFirstResponder()
-        get_request("bili_video", "https://api.bilibili.com/archive_stat/stat?aid=" + self.searchBar.text!)
-        get_request("jiji_video", "http://www.jijidown.com/Api/AvToCid/" + self.searchBar.text!)
-        get_request("webpage", "http://bili.utoptutor.com/videopage?aid=" + self.searchBar.text!)
+        if Int(self.searchBar.text!) == nil {
+            let alertController = UIAlertController(title: "Error", message:
+                "Video ID should be an integer", preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alertController, animated: true, completion: nil)
+        } else {
+            get_request("bili_video", "https://api.bilibili.com/archive_stat/stat?aid=" + self.searchBar.text!)
+            get_request("jiji_video", "http://www.jijidown.com/Api/AvToCid/" + self.searchBar.text!)
+            get_request("webpage", "http://bili.utoptutor.com/videopage?aid=" + self.searchBar.text!)
+        }
     }
     
     func get_request(_ type: String, _ urlstr: String) {
@@ -79,13 +101,37 @@ class VideoSearchController: UITableViewController, UISearchBarDelegate {
     }
     
     func displayInfo(_ type: String, _ json: [String: Any]) {
+        DispatchQueue.main.async(execute: {
+            self.statTable.isHidden = false
+            self.aid = self.searchBar.text
+            if FavoriteDB.sharedInstance.videos.contains(Int(self.aid)!) {
+                self.favoriteIcon.image = UIImage(named: "favorite")
+            } else {
+                self.favoriteIcon.image = UIImage(named: "notfavorite")
+            }
+        })
         if type == "bili_video" {
             if json["code"] as! Int != 0 {
                 DispatchQueue.main.async(execute: {
-                    self.videoName.text = "Video not found"
+                    self.videoName.text = "Video doesn't exist"
                 })
             } else {
-                // TODO
+                DispatchQueue.main.async(execute: {
+                    let data = json["data"] as! [String: Any?]
+                    self.viewCount.text = String(data["view"] as! Int)
+                    self.danmakuCount.text = String(data["danmaku"] as! Int)
+                    self.replyCount.text = String(data["reply"] as! Int)
+                    self.favoriteCount.text = String(data["favorite"] as! Int)
+                    self.coinCount.text = String(data["coin"] as! Int)
+                    self.ShareCount.text = String(data["share"] as! Int)
+                    let curRankInt = data["now_rank"] as! Int
+                    let hisRankInt = data["his_rank"] as! Int
+                    let copyrightInt = data["copyright"] as! Int
+                    self.curRanking.text = curRankInt == 0 ? ">100" :  String(curRankInt)
+                    self.hisRanking.text = hisRankInt == 0 ? ">1000" :  String(hisRankInt)
+                    self.copyright.text = copyrightInt == 1 ? "Yes" : "No"
+                })
+                
             }
         } else if type == "jiji_video" {
             if json["code"] as! Int != 0 || json["maxpage"] as! Int == 0 {
@@ -151,9 +197,8 @@ class VideoSearchController: UITableViewController, UISearchBarDelegate {
     }
     
     func set_image(_ image_view: UIImageView, _ urlstr: String) {
-        do {
-            let imgurl = URL(string: urlstr)
-            let img = try? Data(contentsOf: imgurl!)
+        if let imgurl = URL(string: urlstr) {
+            let img = try? Data(contentsOf: imgurl)
             image_view.image = UIImage(data: img!)
         }
     }
@@ -164,34 +209,47 @@ class VideoSearchController: UITableViewController, UISearchBarDelegate {
         
         if self.isMovingFromParentViewController {
             searchBar.resignFirstResponder()
-            searchBar.isHidden = true
+            if #available(iOS 11.0, *) {
+                searchBar.isHidden = true
+            }
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        searchBar.isHidden = false
+        if #available(iOS 11.0, *) {
+            searchBar.isHidden = false
+        }
     }
     
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        if segue.identifier == "videoTitle" {
+            let controller = segue.destination as! WebKitController
+            controller.urlStr = self.aid
+        } else if segue.identifier == "uploader" {
+            // TODO
+            print("TAT")
+        } else {
+            
+        }
     }
-    */
+    
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 3
+        return 4
     }
-    
+    /*
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
-    }
+    }*/
     
     
     

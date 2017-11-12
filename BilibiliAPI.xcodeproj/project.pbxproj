@@ -13,6 +13,8 @@
 		186657531F92A9680001E2F6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 186657511F92A9680001E2F6 /* LaunchScreen.storyboard */; };
 		1866575D1F93E7BB0001E2F6 /* VideoTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1866575C1F93E7BB0001E2F6 /* VideoTabController.swift */; };
 		18AB999E1FA58C9A002526A0 /* WebKitController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AB999D1FA58C9A002526A0 /* WebKitController.swift */; };
+		18BF57E81FB8E0F90034E4A2 /* favoriteDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BF57E71FB8E0F90034E4A2 /* favoriteDB.swift */; };
+		18BF57EA1FB8E7670034E4A2 /* ViewMainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BF57E91FB8E7670034E4A2 /* ViewMainController.swift */; };
 		18FDBF151F94270E00F95B9C /* VideoSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FDBF141F94270E00F95B9C /* VideoSearchController.swift */; };
 /* End PBXBuildFile section */
 
@@ -25,6 +27,8 @@
 		186657541F92A9680001E2F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1866575C1F93E7BB0001E2F6 /* VideoTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoTabController.swift; sourceTree = "<group>"; };
 		18AB999D1FA58C9A002526A0 /* WebKitController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebKitController.swift; sourceTree = "<group>"; };
+		18BF57E71FB8E0F90034E4A2 /* favoriteDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = favoriteDB.swift; sourceTree = "<group>"; };
+		18BF57E91FB8E7670034E4A2 /* ViewMainController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewMainController.swift; sourceTree = "<group>"; };
 		18FDBF141F94270E00F95B9C /* VideoSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoSearchController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -60,6 +64,8 @@
 			children = (
 				186657461F92A9670001E2F6 /* AppDelegate.swift */,
 				1866574C1F92A9680001E2F6 /* Main.storyboard */,
+				18BF57E91FB8E7670034E4A2 /* ViewMainController.swift */,
+				18BF57E71FB8E0F90034E4A2 /* favoriteDB.swift */,
 				18FDBF141F94270E00F95B9C /* VideoSearchController.swift */,
 				1866575C1F93E7BB0001E2F6 /* VideoTabController.swift */,
 				18AB999D1FA58C9A002526A0 /* WebKitController.swift */,
@@ -144,6 +150,8 @@
 			files = (
 				186657471F92A9670001E2F6 /* AppDelegate.swift in Sources */,
 				1866575D1F93E7BB0001E2F6 /* VideoTabController.swift in Sources */,
+				18BF57E81FB8E0F90034E4A2 /* favoriteDB.swift in Sources */,
+				18BF57EA1FB8E7670034E4A2 /* ViewMainController.swift in Sources */,
 				18FDBF151F94270E00F95B9C /* VideoSearchController.swift in Sources */,
 				18AB999E1FA58C9A002526A0 /* WebKitController.swift in Sources */,
 			);
@@ -285,6 +293,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Q5C4VP6LJD;
 				INFOPLIST_FILE = BilibiliAPI/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "Cornell-University.BilibiliAPI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -300,6 +309,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Q5C4VP6LJD;
 				INFOPLIST_FILE = BilibiliAPI/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "Cornell-University.BilibiliAPI";
 				PRODUCT_NAME = "$(TARGET_NAME)";
