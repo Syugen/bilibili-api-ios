@@ -8,7 +8,7 @@
 
 import UIKit
 
-class VideoSearchController: UITableViewController, UISearchBarDelegate {
+class VideoSearchController: UITableViewController {
     
     @IBOutlet weak var videoName: UILabel!
     @IBOutlet weak var upImage: UIImageView!
@@ -28,7 +28,8 @@ class VideoSearchController: UITableViewController, UISearchBarDelegate {
     @IBOutlet weak var curRanking: UILabel!
     @IBOutlet weak var hisRanking: UILabel!
     @IBOutlet weak var copyright: UILabel!
-    @IBOutlet weak var favoriteIcon: UIImageView!
+    @IBOutlet weak var favoriteIcon: UIButton!
+    
     
     @IBOutlet var statTable: UITableView!
     
@@ -47,10 +48,11 @@ class VideoSearchController: UITableViewController, UISearchBarDelegate {
         if #available(iOS 11.0, *) {
             self.searchBar.heightAnchor.constraint(equalToConstant: 44).isActive = true
         }
+        self.statTable.isHidden = true
+        self.favoriteIcon.addTarget(self, action: #selector(favoritePressed), for: UIControlEvents.touchUpInside)
         
         let searchButton = UIBarButtonItem(title: "Search", style: .plain, target: self, action: #selector(searchPressed))
         self.navigationItem.setRightBarButton(searchButton, animated: true)
-        self.statTable.isHidden = true
         reset_views()
         if self.searchButtonPressed {
             self.searchButtonPressed = false
@@ -69,10 +71,25 @@ class VideoSearchController: UITableViewController, UISearchBarDelegate {
         self.videoImage.image = nil
         self.desc.text = ""
         self.info_set = false
+        self.favoriteIcon.setImage(UIImage(named: "notfavorite"), for: UIControlState.normal)
     }
     
     @objc func searchPressed(_ sender: UIBarButtonItem) {
         search()
+    }
+    
+    @objc func favoritePressed() {
+        if let index = FavoriteDB.sharedInstance.videoIDs.index(of: self.aid) {
+            self.favoriteIcon.setImage(UIImage(named: "notfavorite"), for: UIControlState.normal)
+            FavoriteDB.sharedInstance.videoIDs.remove(at: index)
+            FavoriteDB.sharedInstance.videoTitles.remove(at: index)
+            FavoriteDB.sharedInstance.videoImgs.remove(at: index)
+        } else {
+            self.favoriteIcon.setImage(UIImage(named: "favorite"), for: UIControlState.normal)
+            FavoriteDB.sharedInstance.videoIDs.append(self.aid)
+            FavoriteDB.sharedInstance.videoTitles.append(self.videoName.text)
+            FavoriteDB.sharedInstance.videoImgs.append(self.videoImage.image)
+        }
     }
     
     func search() {
@@ -114,9 +131,7 @@ class VideoSearchController: UITableViewController, UISearchBarDelegate {
             self.statTable.isHidden = false
             self.aid = self.searchBar.text
             if FavoriteDB.sharedInstance.videoIDs.contains(self.aid!) {
-                self.favoriteIcon.image = UIImage(named: "favorite")
-            } else {
-                self.favoriteIcon.image = UIImage(named: "notfavorite")
+                self.favoriteIcon.setImage(UIImage(named: "favorite"), for: UIControlState.normal)
             }
         })
         if type == "bili_video" {

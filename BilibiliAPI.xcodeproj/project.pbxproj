@@ -16,6 +16,8 @@
 		18BF57E81FB8E0F90034E4A2 /* favoriteDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BF57E71FB8E0F90034E4A2 /* favoriteDB.swift */; };
 		18BF57EC1FB8E8290034E4A2 /* VideoMainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BF57EB1FB8E8290034E4A2 /* VideoMainController.swift */; };
 		18BF57EE1FB8F0DD0034E4A2 /* FavoriteVideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BF57ED1FB8F0DD0034E4A2 /* FavoriteVideoCell.swift */; };
+		18BF57F01FB948410034E4A2 /* UserSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BF57EF1FB948410034E4A2 /* UserSearchController.swift */; };
+		18BF57F21FB94B4D0034E4A2 /* UserMainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BF57F11FB94B4D0034E4A2 /* UserMainController.swift */; };
 		18FDBF151F94270E00F95B9C /* VideoSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18FDBF141F94270E00F95B9C /* VideoSearchController.swift */; };
 /* End PBXBuildFile section */
 
@@ -31,6 +33,8 @@
 		18BF57E71FB8E0F90034E4A2 /* favoriteDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = favoriteDB.swift; sourceTree = "<group>"; };
 		18BF57EB1FB8E8290034E4A2 /* VideoMainController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoMainController.swift; sourceTree = "<group>"; };
 		18BF57ED1FB8F0DD0034E4A2 /* FavoriteVideoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteVideoCell.swift; sourceTree = "<group>"; };
+		18BF57EF1FB948410034E4A2 /* UserSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSearchController.swift; sourceTree = "<group>"; };
+		18BF57F11FB94B4D0034E4A2 /* UserMainController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMainController.swift; sourceTree = "<group>"; };
 		18FDBF141F94270E00F95B9C /* VideoSearchController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoSearchController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -66,6 +70,8 @@
 			children = (
 				186657461F92A9670001E2F6 /* AppDelegate.swift */,
 				1866574C1F92A9680001E2F6 /* Main.storyboard */,
+				18BF57F11FB94B4D0034E4A2 /* UserMainController.swift */,
+				18BF57EF1FB948410034E4A2 /* UserSearchController.swift */,
 				18BF57E71FB8E0F90034E4A2 /* favoriteDB.swift */,
 				18BF57EB1FB8E8290034E4A2 /* VideoMainController.swift */,
 				18BF57ED1FB8F0DD0034E4A2 /* FavoriteVideoCell.swift */,
@@ -157,6 +163,8 @@
 				18FDBF151F94270E00F95B9C /* VideoSearchController.swift in Sources */,
 				18BF57EC1FB8E8290034E4A2 /* VideoMainController.swift in Sources */,
 				18BF57EE1FB8F0DD0034E4A2 /* FavoriteVideoCell.swift in Sources */,
+				18BF57F21FB94B4D0034E4A2 /* UserMainController.swift in Sources */,
+				18BF57F01FB948410034E4A2 /* UserSearchController.swift in Sources */,
 				18AB999E1FA58C9A002526A0 /* WebKitController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

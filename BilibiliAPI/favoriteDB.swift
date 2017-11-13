@@ -9,20 +9,23 @@
 import Foundation
 import UIKit
 
-let DBChange = "DB_CHANGED"
+let VideoDBChange = "VIDEO_DB_CHANGED"
+let UserDBChange = "USER_DB_CHANGED"
 
 class FavoriteDB {
     static var sharedInstance = FavoriteDB()
     
-    var videoTitles: [String] = ["asdf","asdf","asdf","asdf","asdf","asdf","asdf","asdf","asdf","asdf"]
-    var videoIDs: [String] = ["170001","170001","170001","170001","170001","170001","170001","170001","170001","170001"] {
+    var videoIDs: [String] = ["170001"] {
         didSet {
-            NotificationCenter.default.post(name: Notification.Name(DBChange), object: self)
+            NotificationCenter.default.post(name: Notification.Name(VideoDBChange), object: self)
         }
     }
-    var uploaders : [Int] = [7483880] {
+    var videoTitles: [String?] = ["asdf"]
+    var videoImgs: [UIImage?] = [nil]
+    
+    var userIDs : [String] = ["7483880"] {
         didSet {
-            NotificationCenter.default.post(name: Notification.Name(DBChange), object: self)
+            NotificationCenter.default.post(name: Notification.Name(UserDBChange), object: self)
         }
     }
 }

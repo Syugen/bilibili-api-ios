@@ -18,6 +18,10 @@ class VideoMainController: UIViewController, UITableViewDataSource, UITableViewD
         favoriteTable.dataSource = self
         favoriteTable.delegate = self
         favoriteTable.rowHeight = 100
+        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(VideoDBChange), object: FavoriteDB.sharedInstance, queue: nil) {
+            (NSNotification) in self.favoriteTable.reloadData()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -25,14 +29,19 @@ class VideoMainController: UIViewController, UITableViewDataSource, UITableViewD
         // Dispose of any resources that can be recreated.
     }
     
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "Favorite Videos"
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return FavoriteDB.sharedInstance.videoIDs.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath) as! FavoriteVideoCell
-        cell.videoTitle?.text = FavoriteDB.sharedInstance.videoTitles[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: "videoReusedCell", for: indexPath) as! FavoriteVideoCell
         cell.videoID?.text = FavoriteDB.sharedInstance.videoIDs[indexPath.row]
+        cell.videoTitle?.text = FavoriteDB.sharedInstance.videoTitles[indexPath.row]
+        cell.videoImg?.image = FavoriteDB.sharedInstance.videoImgs[indexPath.row]
         return cell
     }
     
