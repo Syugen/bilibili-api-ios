@@ -29,14 +29,13 @@ class VideoSearchController: UITableViewController {
     @IBOutlet weak var hisRanking: UILabel!
     @IBOutlet weak var copyright: UILabel!
     @IBOutlet weak var favoriteIcon: UIButton!
-    
-    
     @IBOutlet var statTable: UITableView!
     
     let searchBar = UISearchBar()
     var searchButtonPressed = false
     var info_set = false
     var aid: String!
+    var uid: String!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -94,7 +93,9 @@ class VideoSearchController: UITableViewController {
     
     func search() {
         self.reset_views()
-        self.videoName.text = "Searching " + searchBar.text!
+        self.statTable.isHidden = false
+        self.aid = self.searchBar.text
+        self.videoName.text = "Searching " + self.aid
         self.searchBar.resignFirstResponder()
         if Int(self.searchBar.text!) == nil {
             let alertController = UIAlertController(title: "Error", message:
@@ -103,8 +104,8 @@ class VideoSearchController: UITableViewController {
             self.present(alertController, animated: true, completion: nil)
         } else {
             get_request("bili_video", "https://api.bilibili.com/archive_stat/stat?aid=" + self.searchBar.text!)
-            get_request("jiji_video", "http://www.jijidown.com/Api/AvToCid/" + self.searchBar.text!)
-            get_request("webpage", "http://bili.utoptutor.com/videopage?aid=" + self.searchBar.text!)
+            get_request("jiji_video", "http://www.jijidown.com/Api/AvToCid/" + self.aid)
+            get_request("webpage", "http://bili.utoptutor.com/videopage?aid=" + self.aid)
         }
     }
     
@@ -115,7 +116,9 @@ class VideoSearchController: UITableViewController {
                 do {
                     // Convert the data to JSON
                     let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-                    self.displayInfo(type, json)
+                    DispatchQueue.main.async(execute: {
+                        self.displayInfo(type, json)
+                    })
                 }  catch let error as NSError {
                     print(error.localizedDescription)
                 }
@@ -127,95 +130,70 @@ class VideoSearchController: UITableViewController {
     }
     
     func displayInfo(_ type: String, _ json: [String: Any]) {
-        DispatchQueue.main.async(execute: {
-            self.statTable.isHidden = false
-            self.aid = self.searchBar.text
-            if FavoriteDB.sharedInstance.videoIDs.contains(self.aid!) {
-                self.favoriteIcon.setImage(UIImage(named: "favorite"), for: UIControlState.normal)
-            }
-        })
         if type == "bili_video" {
             if json["code"] as! Int != 0 {
-                DispatchQueue.main.async(execute: {
-                    self.videoName.text = "Video doesn't exist"
-                })
+                self.videoName.text = "Video doesn't exist"
             } else {
-                DispatchQueue.main.async(execute: {
-                    let data = json["data"] as! [String: Any?]
-                    self.viewCount.text = String(data["view"] as! Int)
-                    self.danmakuCount.text = String(data["danmaku"] as! Int)
-                    self.replyCount.text = String(data["reply"] as! Int)
-                    self.favoriteCount.text = String(data["favorite"] as! Int)
-                    self.coinCount.text = String(data["coin"] as! Int)
-                    self.ShareCount.text = String(data["share"] as! Int)
-                    let curRankInt = data["now_rank"] as! Int
-                    let hisRankInt = data["his_rank"] as! Int
-                    let copyrightInt = data["copyright"] as! Int
-                    self.curRanking.text = curRankInt == 0 ? ">100" :  String(curRankInt)
-                    self.hisRanking.text = hisRankInt == 0 ? ">1000" :  String(hisRankInt)
-                    self.copyright.text = copyrightInt == 1 ? "Yes" : "No"
-                })
-                
+                let data = json["data"] as! [String: Any?]
+                self.viewCount.text = String(data["view"] as! Int)
+                self.danmakuCount.text = String(data["danmaku"] as! Int)
+                self.replyCount.text = String(data["reply"] as! Int)
+                self.favoriteCount.text = String(data["favorite"] as! Int)
+                self.coinCount.text = String(data["coin"] as! Int)
+                self.ShareCount.text = String(data["share"] as! Int)
+                let curRankInt = data["now_rank"] as! Int
+                let hisRankInt = data["his_rank"] as! Int
+                let copyrightInt = data["copyright"] as! Int
+                self.curRanking.text = curRankInt == 0 ? ">100" :  String(curRankInt)
+                self.hisRanking.text = hisRankInt == 0 ? ">1000" :  String(hisRankInt)
+                self.copyright.text = copyrightInt == 1 ? "Yes" : "No"
             }
         } else if type == "jiji_video" {
             if json["code"] as! Int != 0 || json["maxpage"] as! Int == 0 {
                 // TODO: set videoimage as defaulf "not found" image
                 return
             } else {
-                DispatchQueue.main.async(execute: {
-                    if self.info_set == false {
-                        self.videoName.text = json["title"] as? String
-                        self.upName.text = json["up"] as? String
-                        self.desc.text = json["desc"] as? String
-                        self.set_image(self.upImage, json["upimg"] as! String)
-                    }
-                    self.info_set = true
-                    self.set_image(self.videoImage, json["img"] as! String)
-                })
+                if self.info_set == false {
+                    self.videoName.text = json["title"] as? String
+                    self.upName.text = json["up"] as? String
+                    self.desc.text = json["desc"] as? String
+                    self.set_image(self.upImage, json["upimg"] as! String)
+                }
+                self.info_set = true
+                self.set_image(self.videoImage, json["img"] as! String)
             }
         } else if type == "webpage" {
             if json["error"] as? Bool == true {
-                DispatchQueue.main.async(execute: {
-                    self.upsign.text = "Failed to uploader infomation"
-                    return
-                })
+                self.upsign.text = "Failed to uploader infomation"
+                return
             } else {
-                DispatchQueue.main.async(execute: {
-                    if self.info_set == false {
-                        self.videoName.text = json["title"] as? String
-                        self.upName.text = json["upName"] as? String
-                        self.desc.text = json["description"] as? String
-                        self.set_image(self.upImage, json["upAvatar"] as! String)
-                    }
-                    self.info_set = true
-                    self.upsign.text = json["upSign"] as? String
-                })
-                let uid = json["uid"] as! String
-                get_request("video_amount", "http://api.bilibili.com/x/space/navnum?mid=" + uid)
-                get_request("follow_amount", "http://api.bilibili.com/x/relation/stat?vmid=" + uid)
+                if self.info_set == false {
+                    self.videoName.text = json["title"] as? String
+                    self.upName.text = json["upName"] as? String
+                    self.desc.text = json["description"] as? String
+                    self.set_image(self.upImage, json["upAvatar"] as! String)
+                }
+                self.info_set = true
+                self.upsign.text = json["upSign"] as? String
+                
+                self.uid = json["uid"] as! String
+                get_request("video_amount", "http://api.bilibili.com/x/space/navnum?mid=" + self.uid)
+                get_request("follow_amount", "http://api.bilibili.com/x/relation/stat?vmid=" + self.uid)
             }
         } else if type == "video_amount" {
             if json["code"] as! Int != 0 {
-                DispatchQueue.main.async(execute: {
-                    //self.videoName.text = "Video not found"
-                })
+                //self.videoName.text = "Video not found"
             } else {
-                DispatchQueue.main.async(execute: {
-                    let data = json["data"] as! [String: Any?]
-                    self.videoamount.text = "(" + String(data["video"] as! Int) + " videos)"
-                })
+                let data = json["data"] as! [String: Any?]
+                self.videoamount.text = "(" + String(data["video"] as! Int) + " videos)"
             }
         } else if type == "follow_amount" {
             if json["code"] as! Int != 0 {
-                DispatchQueue.main.async(execute: {
-                    //self.videoName.text = "Video not found"
-                })
+                //self.videoName.text = "Video not found"
             } else {
-                DispatchQueue.main.async(execute: {
-                    let data = json["data"] as! [String: Any?]
-                    self.following.text = "Following: " + String(data["following"] as! Int)
-                    self.follower.text = "Follower: " + String(data["follower"] as! Int)
-                })
+                let data = json["data"] as! [String: Any?]
+                self.following.text = "Following: " + String(data["following"] as! Int)
+                self.follower.text = "Follower: " + String(data["follower"] as! Int)
             }
         }
     }
@@ -258,8 +236,9 @@ class VideoSearchController: UITableViewController {
             let controller = segue.destination as! WebKitController
             controller.urlStr = self.aid
         } else if segue.identifier == "uploader" {
-            // TODO
-            print("TAT")
+            let vcDest = segue.destination as! UserSearchController
+            vcDest.searchBar.text = self.uid
+            vcDest.searchButtonPressed = true
         } else {
             
         }

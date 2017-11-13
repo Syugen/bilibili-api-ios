@@ -454,7 +454,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="UKz-4d-lxr" kind="show" id="1Tr-Vl-sO5"/>
+                                            <segue destination="UKz-4d-lxr" kind="show" identifier="uploader" id="1Tr-Vl-sO5"/>
                                         </connections>
                                     </tableViewCell>
                                 </cells>
@@ -1057,6 +1057,7 @@
                         <outlet property="favoriteIcon" destination="m9z-Nb-jZG" id="l8P-6Q-UNh"/>
                         <outlet property="follower" destination="w9e-ei-zvk" id="vxl-0u-LZk"/>
                         <outlet property="following" destination="y2v-Mr-07y" id="CAI-jE-7ak"/>
+                        <outlet property="statTable" destination="RGU-ip-L6c" id="1IX-ff-kk4"/>
                         <outlet property="upImage" destination="dJq-a4-5x6" id="GDx-JG-g5g"/>
                         <outlet property="upName" destination="FGC-MX-hgW" id="HhO-LP-lSR"/>
                         <outlet property="upsign" destination="cij-3s-0gA" id="mql-2g-5gJ"/>

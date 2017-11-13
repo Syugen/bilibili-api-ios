@@ -28,4 +28,6 @@ class FavoriteDB {
             NotificationCenter.default.post(name: Notification.Name(UserDBChange), object: self)
         }
     }
+    var userNames: [String?] = ["asdf"]
+    var userImgs: [UIImage?] = [nil]
 }
