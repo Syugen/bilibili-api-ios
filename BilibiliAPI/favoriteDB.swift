@@ -57,24 +57,32 @@ class FavoriteDB {
         
         if self.videoIDs.count != self.videoTitles.count ||
             self.videoIDs.count != self.videoImgs.count {
-            let videoImages = NSKeyedArchiver.archivedData(withRootObject: [])
-            UserDefaults.standard.set(videoImages, forKey: VideoImgs)
-            UserDefaults.standard.set([], forKey: VideoIDs)
-            UserDefaults.standard.set([], forKey: VideoTitles)
-            self.videoIDs = []
-            self.videoTitles = []
-            self.videoImgs = []
+            removeVideos()
         }
         
         if self.userIDs.count != self.userNames.count ||
             self.userIDs.count != self.userImgs.count {
-            let userImages = NSKeyedArchiver.archivedData(withRootObject: [])
-            UserDefaults.standard.set(userImages, forKey: UserImgs)
-            UserDefaults.standard.set([], forKey: UserIDs)
-            UserDefaults.standard.set([], forKey: UserNames)
-            self.userIDs = []
-            self.userNames = []
-            self.userImgs = []
+            removeUsers()
         }
+    }
+    
+    func removeVideos() {
+        let videoImages = NSKeyedArchiver.archivedData(withRootObject: [])
+        UserDefaults.standard.set(videoImages, forKey: VideoImgs)
+        UserDefaults.standard.set([], forKey: VideoIDs)
+        UserDefaults.standard.set([], forKey: VideoTitles)
+        self.videoIDs = []
+        self.videoTitles = []
+        self.videoImgs = []
+    }
+    
+    func removeUsers() {
+        let userImages = NSKeyedArchiver.archivedData(withRootObject: [])
+        UserDefaults.standard.set(userImages, forKey: UserImgs)
+        UserDefaults.standard.set([], forKey: UserIDs)
+        UserDefaults.standard.set([], forKey: UserNames)
+        self.userIDs = []
+        self.userNames = []
+        self.userImgs = []
     }
 }

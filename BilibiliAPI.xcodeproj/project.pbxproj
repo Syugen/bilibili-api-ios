@@ -12,6 +12,7 @@
 		186657501F92A9680001E2F6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1866574F1F92A9680001E2F6 /* Assets.xcassets */; };
 		186657531F92A9680001E2F6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 186657511F92A9680001E2F6 /* LaunchScreen.storyboard */; };
 		18669FEC1FBAD44500CFD099 /* VideoDescriptionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18669FEB1FBAD44500CFD099 /* VideoDescriptionController.swift */; };
+		18669FEE1FBB59B400CFD099 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18669FED1FBB59B400CFD099 /* SettingsController.swift */; };
 		18AB999E1FA58C9A002526A0 /* WebKitController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AB999D1FA58C9A002526A0 /* WebKitController.swift */; };
 		18BF57E81FB8E0F90034E4A2 /* favoriteDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BF57E71FB8E0F90034E4A2 /* favoriteDB.swift */; };
 		18BF57EC1FB8E8290034E4A2 /* VideoMainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BF57EB1FB8E8290034E4A2 /* VideoMainController.swift */; };
@@ -31,6 +32,7 @@
 		186657521F92A9680001E2F6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		186657541F92A9680001E2F6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		18669FEB1FBAD44500CFD099 /* VideoDescriptionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDescriptionController.swift; sourceTree = "<group>"; };
+		18669FED1FBB59B400CFD099 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsController.swift; path = BilibiliAPI/SettingsController.swift; sourceTree = SOURCE_ROOT; };
 		18AB999D1FA58C9A002526A0 /* WebKitController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebKitController.swift; sourceTree = "<group>"; };
 		18BF57E71FB8E0F90034E4A2 /* favoriteDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = favoriteDB.swift; sourceTree = "<group>"; };
 		18BF57EB1FB8E8290034E4A2 /* VideoMainController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoMainController.swift; sourceTree = "<group>"; };
@@ -72,11 +74,12 @@
 		186657451F92A9670001E2F6 /* BilibiliAPI */ = {
 			isa = PBXGroup;
 			children = (
-				18C312601FBAB5B70059BBEE /* Video */,
-				18C3125F1FBAB58F0059BBEE /* User */,
 				186657461F92A9670001E2F6 /* AppDelegate.swift */,
 				1866574C1F92A9680001E2F6 /* Main.storyboard */,
 				18BF57E71FB8E0F90034E4A2 /* favoriteDB.swift */,
+				18669FED1FBB59B400CFD099 /* SettingsController.swift */,
+				18C312601FBAB5B70059BBEE /* Video */,
+				18C3125F1FBAB58F0059BBEE /* User */,
 				1866574F1F92A9680001E2F6 /* Assets.xcassets */,
 				186657511F92A9680001E2F6 /* LaunchScreen.storyboard */,
 				186657541F92A9680001E2F6 /* Info.plist */,
@@ -179,6 +182,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18669FEE1FBB59B400CFD099 /* SettingsController.swift in Sources */,
 				186657471F92A9670001E2F6 /* AppDelegate.swift in Sources */,
 				18BF57E81FB8E0F90034E4A2 /* favoriteDB.swift in Sources */,
 				18FDBF151F94270E00F95B9C /* VideoSearchController.swift in Sources */,
