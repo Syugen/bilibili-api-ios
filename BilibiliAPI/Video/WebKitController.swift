@@ -12,6 +12,7 @@ import WebKit
 class WebKitController: UIViewController, WKUIDelegate {
     var webView: WKWebView!
     var progressView: UIProgressView!
+    var videoTitle: String!
     var urlStr: String!
     var finished: Bool!
     var timer: Timer!
@@ -32,6 +33,7 @@ class WebKitController: UIViewController, WKUIDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        navigationItem.title = self.videoTitle
         let myURL = URL(string: "https://www.bilibili.com/video/av" + self.urlStr + "/")
         let myRequest = URLRequest(url: myURL!)
         self.webView.load(myRequest)

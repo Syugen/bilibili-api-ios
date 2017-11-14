@@ -1074,7 +1074,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <segue destination="Y8G-kA-J8j" kind="show" id="Vbh-4B-6BO"/>
+                                            <segue destination="Y8G-kA-J8j" kind="show" identifier="videoList" id="Vbh-4B-6BO"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="6a6-yU-hhs">
@@ -1112,9 +1112,6 @@
                                                 <constraint firstItem="y2v-Mr-07y" firstAttribute="centerY" secondItem="Ljs-rE-2Ji" secondAttribute="centerY" id="qpy-Us-iCR"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="Y8G-kA-J8j" kind="show" id="lLw-eT-be6"/>
-                                        </connections>
                                     </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="j37-Le-MeK">
                                         <rect key="frame" x="0.0" y="313.5" width="320" height="44"/>
@@ -1151,9 +1148,6 @@
                                                 <constraint firstItem="aGl-eS-mNb" firstAttribute="leading" secondItem="vyb-e6-Uv5" secondAttribute="leading" constant="10" id="yGD-8h-wux"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <connections>
-                                            <segue destination="Y8G-kA-J8j" kind="show" id="g05-mQ-z77"/>
-                                        </connections>
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
@@ -1457,22 +1451,87 @@
             </objects>
             <point key="canvasLocation" x="3791" y="-415"/>
         </scene>
-        <!--Table View Controller-->
+        <!--User Video Controller-->
         <scene sceneID="H1b-8d-wQf">
             <objects>
-                <tableViewController id="Y8G-kA-J8j" sceneMemberID="viewController">
+                <tableViewController id="Y8G-kA-J8j" customClass="UserVideoController" customModule="BilibiliAPI" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="F8V-1Q-1hL">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="gOo-wu-1g7">
-                                <rect key="frame" x="0.0" y="28" width="320" height="44"/>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="videoReusedCell" rowHeight="100" id="QhO-KR-VV5" customClass="FavoriteVideoCell" customModule="BilibiliAPI" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="320" height="100"/>
                                 <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gOo-wu-1g7" id="MEb-9X-Shb">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="QhO-KR-VV5" id="qV3-Ps-XQF">
+                                    <rect key="frame" x="0.0" y="0.0" width="287" height="99.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Video Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ubr-mJ-a1j">
+                                            <rect key="frame" x="120" y="13" width="157" height="50"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="50" id="g5x-r6-3kO"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="aid" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1yq-S8-3Rf">
+                                            <rect key="frame" x="137.5" y="63" width="23" height="25"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="25" id="zdE-uK-uMP"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZQU-ca-stp">
+                                            <rect key="frame" x="10" y="12.5" width="100" height="74.5"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="100" id="CMc-RN-NHl"/>
+                                                <constraint firstAttribute="width" secondItem="ZQU-ca-stp" secondAttribute="height" multiplier="4:3" constant="1" id="duL-tC-UkJ"/>
+                                            </constraints>
+                                        </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="av" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1I8-zr-2MH">
+                                            <rect key="frame" x="120" y="63" width="17.5" height="25"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="25" id="R7h-db-2Wl"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="date" textAlignment="right" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nd4-29-X2u">
+                                            <rect key="frame" x="242.5" y="63" width="34.5" height="25"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="25" id="0pP-uU-xcA"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="trailing" secondItem="Ubr-mJ-a1j" secondAttribute="trailing" constant="10" id="0KV-BB-Jgn"/>
+                                        <constraint firstItem="Ubr-mJ-a1j" firstAttribute="top" secondItem="qV3-Ps-XQF" secondAttribute="topMargin" constant="5" id="15R-fG-Fgs"/>
+                                        <constraint firstAttribute="trailing" secondItem="nd4-29-X2u" secondAttribute="trailing" constant="10" id="4Ih-iu-fRO"/>
+                                        <constraint firstItem="1yq-S8-3Rf" firstAttribute="leading" secondItem="1I8-zr-2MH" secondAttribute="trailing" id="Btq-Qp-aPZ"/>
+                                        <constraint firstItem="ZQU-ca-stp" firstAttribute="centerY" secondItem="qV3-Ps-XQF" secondAttribute="centerY" id="Cyp-6t-7fV"/>
+                                        <constraint firstItem="1yq-S8-3Rf" firstAttribute="top" secondItem="Ubr-mJ-a1j" secondAttribute="bottom" id="Hqi-3E-rN1"/>
+                                        <constraint firstItem="ZQU-ca-stp" firstAttribute="leading" secondItem="qV3-Ps-XQF" secondAttribute="leading" constant="10" id="Noi-3c-D05"/>
+                                        <constraint firstItem="1I8-zr-2MH" firstAttribute="top" secondItem="Ubr-mJ-a1j" secondAttribute="bottom" id="R1O-wN-UMF"/>
+                                        <constraint firstItem="Ubr-mJ-a1j" firstAttribute="leading" secondItem="ZQU-ca-stp" secondAttribute="trailing" constant="10" id="eAA-Y8-l45"/>
+                                        <constraint firstItem="nd4-29-X2u" firstAttribute="top" secondItem="Ubr-mJ-a1j" secondAttribute="bottom" id="h5E-g1-gvl"/>
+                                        <constraint firstItem="1I8-zr-2MH" firstAttribute="leading" secondItem="ZQU-ca-stp" secondAttribute="trailing" constant="10" id="umV-9v-Bxw"/>
+                                    </constraints>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="videoDate" destination="nd4-29-X2u" id="4eW-bx-lSe"/>
+                                    <outlet property="videoID" destination="1yq-S8-3Rf" id="E9O-vb-XX0"/>
+                                    <outlet property="videoImg" destination="ZQU-ca-stp" id="D0W-fz-cPs"/>
+                                    <outlet property="videoTitle" destination="Ubr-mJ-a1j" id="S1q-CT-wn4"/>
+                                    <segue destination="G5e-Xc-49R" kind="show" identifier="" id="ueT-rK-wF0"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -1511,8 +1570,7 @@
         <image name="second" width="30" height="30"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="g05-mQ-z77"/>
         <segue reference="50G-Jy-WUb"/>
-        <segue reference="FhH-VG-RO9"/>
+        <segue reference="ueT-rK-wF0"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -171,7 +171,7 @@ class UserSearchController: UITableViewController {
             } else {
                 let data = json["data"] as! [String: Any?]
                 self.upName.text = data["name"] as? String
-                self.set_image(self.upImage, data["face"] as! String)
+                self.setImage(self.upImage, data["face"] as! String)
                 let sign = data["sign"] as? String
                 self.upsign.text = sign == "" ? "Signature not set" : sign
                 
@@ -220,7 +220,7 @@ class UserSearchController: UITableViewController {
         }
     }
     
-    func set_image(_ image_view: UIImageView, _ urlstr: String) {
+    func setImage(_ image_view: UIImageView, _ urlstr: String) {
         if let imgurl = URL(string: urlstr) {
             let img = try? Data(contentsOf: imgurl)
             image_view.image = UIImage(data: img!)
@@ -246,14 +246,18 @@ class UserSearchController: UITableViewController {
         }
     }
     
-    /*
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        if segue.identifier == "videoList" {
+            let vcDest = segue.destination as! UserVideoController
+            vcDest.username = self.upName.text
+            vcDest.uid = self.uid
+            vcDest.nPages = Int(self.videoamount.text!)! / 100 + 1
+        }
     }
-    */
 
 }

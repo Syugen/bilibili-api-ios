@@ -12,6 +12,7 @@ class FavoriteVideoCell: UITableViewCell {
     @IBOutlet weak var videoImg: UIImageView!
     @IBOutlet weak var videoTitle: UILabel!
     @IBOutlet weak var videoID: UILabel!
+    @IBOutlet weak var videoDate: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

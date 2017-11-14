@@ -179,10 +179,10 @@ class VideoSearchController: UITableViewController {
                     self.videoName.text = json["title"] as? String
                     self.upName.text = json["up"] as? String
                     self.desc.text = json["desc"] as? String
-                    self.set_image(self.upImage, json["upimg"] as! String)
+                    self.setImage(self.upImage, json["upimg"] as! String)
                 }
                 self.info_set = true
-                self.set_image(self.videoImage, json["img"] as! String)
+                self.setImage(self.videoImage, json["img"] as! String)
             }
         } else if type == "webpage" {
             if json["error"] as? Bool == true {
@@ -193,7 +193,7 @@ class VideoSearchController: UITableViewController {
                     self.videoName.text = json["title"] as? String
                     self.upName.text = json["upName"] as? String
                     self.desc.text = json["description"] as? String
-                    self.set_image(self.upImage, json["upAvatar"] as! String)
+                    self.setImage(self.upImage, json["upAvatar"] as! String)
                 }
                 self.info_set = true
                 let sign = json["upSign"] as? String
@@ -221,7 +221,7 @@ class VideoSearchController: UITableViewController {
         }
     }
     
-    func set_image(_ image_view: UIImageView, _ urlstr: String) {
+    func setImage(_ image_view: UIImageView, _ urlstr: String) {
         if let imgurl = URL(string: urlstr) {
             let img = try? Data(contentsOf: imgurl)
             image_view.image = UIImage(data: img!)
@@ -256,8 +256,9 @@ class VideoSearchController: UITableViewController {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
         if segue.identifier == "videoTitle" {
-            let controller = segue.destination as! WebKitController
-            controller.urlStr = self.aid
+            let vcDest = segue.destination as! WebKitController
+            vcDest.videoTitle = self.videoName.text
+            vcDest.urlStr = self.aid
         } else if segue.identifier == "uploader" {
             if self.uid != nil {
                 let vcDest = segue.destination as! UserSearchController
@@ -274,17 +275,4 @@ class VideoSearchController: UITableViewController {
             vcDest.descriptionText.text = self.desc.text
         }
     }
-    
-    
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 4
-    }
-    /*
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
-    }*/
-    
-    
-    
 }
