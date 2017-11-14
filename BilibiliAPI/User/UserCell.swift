@@ -1,18 +1,19 @@
 //
-//  FavoriteVideoCell.swift
+//  FavoriteUserCell.swift
 //  BilibiliAPI
 //
-//  Created by Yuan Zhou on 2017/11/12.
+//  Created by Yuan Zhou on 2017/11/13.
 //  Copyright © 2017年 Yuan Zhou. All rights reserved.
 //
 
 import UIKit
 
-class FavoriteVideoCell: UITableViewCell {
-    @IBOutlet weak var videoImg: UIImageView!
-    @IBOutlet weak var videoTitle: UILabel!
-    @IBOutlet weak var videoID: UILabel!
-    @IBOutlet weak var videoDate: UILabel!
+class UserCell: UITableViewCell {
+    @IBOutlet weak var userImg: UIImageView!
+    @IBOutlet weak var userName: UILabel!
+    @IBOutlet weak var userID: UILabel!
+    @IBOutlet weak var date: UILabel!
+    var uid: String! // This is used for userFollow/userFollower where userID Label does not exist
     
     override func awakeFromNib() {
         super.awakeFromNib()

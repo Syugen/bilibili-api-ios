@@ -179,10 +179,14 @@ class VideoSearchController: UITableViewController {
                     self.videoName.text = json["title"] as? String
                     self.upName.text = json["up"] as? String
                     self.desc.text = json["desc"] as? String
-                    self.setImage(self.upImage, json["upimg"] as! String)
+                    if FavoriteDB.sharedInstance.downloadImage {
+                        self.setImage(self.upImage, json["upimg"] as! String)
+                    }
                 }
                 self.info_set = true
-                self.setImage(self.videoImage, json["img"] as! String)
+                if FavoriteDB.sharedInstance.downloadImage {
+                    self.setImage(self.videoImage, json["img"] as! String)
+                }
             }
         } else if type == "webpage" {
             if json["error"] as? Bool == true {
@@ -193,7 +197,9 @@ class VideoSearchController: UITableViewController {
                     self.videoName.text = json["title"] as? String
                     self.upName.text = json["upName"] as? String
                     self.desc.text = json["description"] as? String
-                    self.setImage(self.upImage, json["upAvatar"] as! String)
+                    if FavoriteDB.sharedInstance.downloadImage {
+                        self.setImage(self.upImage, json["upAvatar"] as! String)
+                    }
                 }
                 self.info_set = true
                 let sign = json["upSign"] as? String

@@ -1,17 +1,18 @@
 //
-//  FavoriteUserCell.swift
+//  FavoriteVideoCell.swift
 //  BilibiliAPI
 //
-//  Created by Yuan Zhou on 2017/11/13.
+//  Created by Yuan Zhou on 2017/11/12.
 //  Copyright © 2017年 Yuan Zhou. All rights reserved.
 //
 
 import UIKit
 
-class FavoriteUserCell: UITableViewCell {
-    @IBOutlet weak var userImg: UIImageView!
-    @IBOutlet weak var userName: UILabel!
-    @IBOutlet weak var userID: UILabel!
+class VideoCell: UITableViewCell {
+    @IBOutlet weak var videoImg: UIImageView!
+    @IBOutlet weak var videoTitle: UILabel!
+    @IBOutlet weak var videoID: UILabel!
+    @IBOutlet weak var videoDate: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

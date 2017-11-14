@@ -21,7 +21,9 @@ class VideoMainController: UIViewController, UITableViewDataSource, UITableViewD
         
         NotificationCenter.default.addObserver(forName: NSNotification.Name(VideoDBChange), object: FavoriteDB.sharedInstance, queue: nil) {
             (NSNotification) in
-            self.favoriteTable.reloadData()
+            if FavoriteDB.sharedInstance.shouldReload {
+                self.favoriteTable.reloadData()
+            }
             let videoImages = NSKeyedArchiver.archivedData(withRootObject: FavoriteDB.sharedInstance.videoImgs)
             UserDefaults.standard.set(videoImages, forKey: VideoImgs)
             UserDefaults.standard.set(FavoriteDB.sharedInstance.videoIDs, forKey: VideoIDs)
@@ -43,11 +45,33 @@ class VideoMainController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "videoReusedCell", for: indexPath) as! FavoriteVideoCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "videoReusedCell", for: indexPath) as! VideoCell
         cell.videoID?.text = FavoriteDB.sharedInstance.videoIDs[indexPath.row]
         cell.videoTitle?.text = FavoriteDB.sharedInstance.videoTitles[indexPath.row]
         cell.videoImg?.image = FavoriteDB.sharedInstance.videoImgs[indexPath.row]
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let alertController = UIAlertController(title: "Are you sure?", message:
+                "Do you really want to remove this video?", preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.destructive, handler: {
+                (action) -> Void in
+                FavoriteDB.sharedInstance.shouldReload = false
+                FavoriteDB.sharedInstance.videoTitles.remove(at: indexPath.row)
+                FavoriteDB.sharedInstance.videoImgs.remove(at: indexPath.row)
+                FavoriteDB.sharedInstance.videoIDs.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .fade)
+                FavoriteDB.sharedInstance.shouldReload = true
+            }))
+            alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+            self.present(alertController, animated: true, completion: nil)
+        }
     }
     
     // MARK: - Navigation
@@ -56,7 +80,7 @@ class VideoMainController: UIViewController, UITableViewDataSource, UITableViewD
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        if let cell = sender as? FavoriteVideoCell {
+        if let cell = sender as? VideoCell {
             let vcDest = segue.destination as! VideoSearchController
             vcDest.searchBar.text = cell.videoID?.text
             vcDest.searchButtonPressed = true

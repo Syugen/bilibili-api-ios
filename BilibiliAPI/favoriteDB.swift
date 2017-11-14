@@ -12,6 +12,7 @@ import UIKit
 let VideoDBChange = "VIDEO_DB_CHANGED"
 let UserDBChange = "USER_DB_CHANGED"
 
+let DownloadImage = "DOWNLOAD_IMAGE"
 let VideoImgs = "VIDEO_IMGS"
 let VideoIDs = "VIDEO_IDS"
 let VideoTitles = "VIDEO_TITLES"
@@ -22,6 +23,12 @@ let UserNames = "USER_NAMES"
 class FavoriteDB {
     static var sharedInstance = FavoriteDB()
     
+    var shouldReload: Bool = true
+    
+    // Settings
+    var downloadImage: Bool
+    
+    // Video related
     var videoIDs: [String] {
         didSet {
             NotificationCenter.default.post(name: Notification.Name(VideoDBChange), object: self)
@@ -30,6 +37,7 @@ class FavoriteDB {
     var videoTitles: [String?]
     var videoImgs: [UIImage?]
     
+    // User related
     var userIDs : [String] {
         didSet {
             NotificationCenter.default.post(name: Notification.Name(UserDBChange), object: self)
@@ -39,6 +47,10 @@ class FavoriteDB {
     var userImgs: [UIImage?]
     
     init() {
+        // Settings
+        self.downloadImage = UserDefaults.standard.object(forKey: DownloadImage) as? Bool ?? true
+        
+        // Load Videos
         self.videoIDs = UserDefaults.standard.object(forKey: VideoIDs) as? [String] ?? []
         self.videoTitles = UserDefaults.standard.object(forKey: VideoTitles) as? [String?] ?? []
         if let imgs = UserDefaults.standard.object(forKey: VideoImgs) as? Data {
@@ -47,6 +59,7 @@ class FavoriteDB {
             self.videoImgs = []
         }
         
+        // Load Users
         self.userIDs = UserDefaults.standard.object(forKey: UserIDs) as? [String] ?? []
         self.userNames = UserDefaults.standard.object(forKey: UserNames) as? [String?] ?? []
         if let imgs = UserDefaults.standard.object(forKey: UserImgs) as? Data {
@@ -55,6 +68,7 @@ class FavoriteDB {
             self.userImgs = []
         }
         
+        // Sanity check
         if self.videoIDs.count != self.videoTitles.count ||
             self.videoIDs.count != self.videoImgs.count {
             removeVideos()

@@ -171,7 +171,9 @@ class UserSearchController: UITableViewController {
             } else {
                 let data = json["data"] as! [String: Any?]
                 self.upName.text = data["name"] as? String
-                self.setImage(self.upImage, data["face"] as! String)
+                if FavoriteDB.sharedInstance.downloadImage {
+                    self.setImage(self.upImage, data["face"] as! String)
+                }
                 let sign = data["sign"] as? String
                 self.upsign.text = sign == "" ? "Signature not set" : sign
                 
@@ -256,7 +258,22 @@ class UserSearchController: UITableViewController {
             let vcDest = segue.destination as! UserVideoController
             vcDest.username = self.upName.text
             vcDest.uid = self.uid
-            vcDest.nPages = Int(self.videoamount.text!)! / 100 + 1
+            let nVideos = Int(self.videoamount.text!)!
+            vcDest.nPages = nVideos / 100 + (nVideos - nVideos / 100 * 100 == 0 ? 0 : 1)
+        } else if segue.identifier == "followList" {
+            let vcDest = segue.destination as! UserFollowController
+            vcDest.username = self.upName.text
+            vcDest.uid = self.uid
+            vcDest.type = "followings"
+            let nFollows = Int(self.following.text!)!
+            vcDest.nPages = nFollows / 100 + (nFollows - nFollows / 100 * 100 == 0 ? 0 : 1)
+        } else if segue.identifier == "followerList" {
+            let vcDest = segue.destination as! UserFollowController
+            vcDest.username = self.upName.text
+            vcDest.uid = self.uid
+            vcDest.type = "followers"
+            let nFollowers = Int(self.follower.text!)!
+            vcDest.nPages = nFollowers / 100 + (nFollowers - nFollowers / 100 * 100 == 0 ? 0 : 1)
         }
     }
 

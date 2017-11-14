@@ -1,5 +1,5 @@
 //
-//  UserVideoController.swift
+//  UserFollowController.swift
 //  BilibiliAPI
 //
 //  Created by Yuan Zhou on 2017/11/14.
@@ -8,16 +8,17 @@
 
 import UIKit
 
-class UserVideoController: UITableViewController {
-    
+class UserFollowController: UITableViewController {
+
     var username: String!
     var uid: String!
+    var type: String!
     var nPages: Int!
-    var videoIDs: [String] = []
-    var videoTitles: [String?] = []
-    var videoImgs: [String?] = []
-    var videoDates: [String?] = []
-
+    var userIDs: [String] = []
+    var userNames: [String?] = []
+    var userImgs: [String?] = []
+    var dates: [String?] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -26,10 +27,11 @@ class UserVideoController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        navigationItem.title = self.username! + "'s videos"
-        self.tableView.rowHeight = 100
+        navigationItem.title = self.username! + "'s " + self.type
+        self.tableView.rowHeight = 70
         if self.nPages > 0 {
-            get_request("1", "http://space.bilibili.com/ajax/member/getSubmitVideos?mid=" + self.uid + "&pagesize=100&tid=0&page=1")
+            let urlPrefix = "http://api.bilibili.com/x/relation/" + self.type + "?vmid=" + self.uid + "&pn="
+            get_request("1", urlPrefix + "1")
         }
     }
 
@@ -47,7 +49,7 @@ class UserVideoController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return self.videoIDs.count
+        return self.userIDs.count
     }
     
     func get_request(_ type: String, _ urlstr: String) {
@@ -71,45 +73,46 @@ class UserVideoController: UITableViewController {
     }
     
     func displayInfo(_ type: String, _ json: [String: Any]) {
-        if json["status"] as! Bool != true {
+        if json["code"] as! Int != 0 {
             let alertController = UIAlertController(title: "Error", message:
-                "Failed to load user's video list.", preferredStyle: UIAlertControllerStyle.alert)
+                "Failed to load user's following list.", preferredStyle: UIAlertControllerStyle.alert)
             alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
             self.present(alertController, animated: true, completion: nil)
         } else {
             let data = json["data"] as! [String: Any?]
-            let vlist = data["vlist"] as! [[String: Any?]]
-            for item in vlist {
-                videoIDs.append(String(item["aid"] as! Int))
-                videoTitles.append(item["title"] as? String)
-                videoImgs.append(item["pic"] as? String)
-                if let date = item["created"] as? Int {
+            let list = data["list"] as! [[String: Any?]]
+            for item in list {
+                userIDs.append(String(item["mid"] as! Int))
+                userNames.append(item["uname"] as? String)
+                userImgs.append(item["face"] as? String)
+                if let date = item["mtime"] as? Int {
                     let date = NSDate(timeIntervalSince1970: TimeInterval(date))
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "YYYY-MM-dd"
                     let localDate = dateFormatter.string(from: date as Date)
-                    videoDates.append(localDate)
+                    dates.append(localDate)
                 }
             }
         }
         if Int(type)! < min(5, self.nPages) {
             let nextPage = String(Int(type)! + 1)
-            get_request(nextPage, "http://space.bilibili.com/ajax/member/getSubmitVideos?mid=" + self.uid + "&pagesize=100&tid=0&page=" + nextPage)
+            let urlPrefix = "http://api.bilibili.com/x/relation/" + self.type + "?vmid=" + self.uid + "&pn="
+            get_request(nextPage, urlPrefix + nextPage)
         }
         self.tableView.reloadData()
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "videoReusedCell", for: indexPath) as! VideoCell
-        cell.videoID?.text = self.videoIDs[indexPath.row]
-        cell.videoTitle?.text = self.videoTitles[indexPath.row]
-        cell.videoDate?.text = self.videoDates[indexPath.row]
-        if FavoriteDB.sharedInstance.downloadImage, let urlstr = self.videoImgs[indexPath.row] {
-            let url = URL(string: "http:" + urlstr)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "userReusedCell", for: indexPath) as! UserCell
+        cell.uid = self.userIDs[indexPath.row]
+        cell.userName?.text = self.userNames[indexPath.row]
+        cell.date?.text = self.dates[indexPath.row]
+        if FavoriteDB.sharedInstance.downloadImage, let urlstr = self.userImgs[indexPath.row] {
+            let url = URL(string: urlstr)
             let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
                 if let data = data {
                     DispatchQueue.main.async(execute: {
-                        cell.videoImg?.image = UIImage(data: data)
+                        cell.userImg?.image = UIImage(data: data)
                     })
                 }
             }
@@ -128,9 +131,9 @@ class UserVideoController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        if let cell = sender as? VideoCell {
-            let vcDest = segue.destination as! VideoSearchController
-            vcDest.searchBar.text = cell.videoID?.text
+        if let cell = sender as? UserCell {
+            let vcDest = segue.destination as! UserSearchController
+            vcDest.searchBar.text = cell.uid
             vcDest.searchButtonPressed = true
         }
     }

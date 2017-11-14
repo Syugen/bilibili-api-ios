@@ -9,11 +9,15 @@
 import UIKit
 
 class SettingsController: UITableViewController {
+    @IBOutlet weak var mySwitch: UISwitch!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        if !FavoriteDB.sharedInstance.downloadImage {
+            self.mySwitch.setOn(false, animated: false)
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -22,7 +26,7 @@ class SettingsController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 0 {
+        if indexPath.section == 1 {
             if indexPath.row == 0 {
                 let alertController = UIAlertController(title: "Are you sure?", message:
                     "Do you really want to remove all favorite videos in your collection?", preferredStyle: UIAlertControllerStyle.alert)
@@ -46,7 +50,18 @@ class SettingsController: UITableViewController {
             }
         }
     }
-
+    
+    @IBAction func downloadImageSwitchChanged(_ sender: Any) {
+        if let mySwitch = sender as? UISwitch {
+            if mySwitch.isOn {
+                FavoriteDB.sharedInstance.downloadImage = true
+            } else {
+                FavoriteDB.sharedInstance.downloadImage = false
+            }
+            UserDefaults.standard.set(FavoriteDB.sharedInstance.downloadImage, forKey: DownloadImage)
+        }
+    }
+    
     /*
     // MARK: - Navigation
 
