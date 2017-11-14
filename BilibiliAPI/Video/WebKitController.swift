@@ -21,13 +21,11 @@ class WebKitController: UIViewController, WKUIDelegate {
         self.webView.uiDelegate = self
         view = self.webView
         
-        self.finished = false
-        self.timer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(timerCallback), userInfo: nil, repeats: true)
-        
         self.progressView = UIProgressView()
         view.addSubview(self.progressView)
+        self.progressView.progressTintColor = UIColor.red
         let navFrame = navigationController?.navigationBar.frame
-        let y = (navFrame?.origin.y)! + (navFrame?.size.height)! + 1
+        let y = (navFrame?.origin.y)! + (navFrame?.size.height)!
         self.progressView.frame = CGRect(x: 0, y: y, width: (navFrame?.size.width)!, height: 1)
     }
     
@@ -37,11 +35,9 @@ class WebKitController: UIViewController, WKUIDelegate {
         let myURL = URL(string: "https://www.bilibili.com/video/av" + self.urlStr + "/")
         let myRequest = URLRequest(url: myURL!)
         self.webView.load(myRequest)
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        
+        self.finished = false
+        self.timer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(timerCallback), userInfo: nil, repeats: true)
     }
     
     @objc func timerCallback() {
@@ -52,15 +48,4 @@ class WebKitController: UIViewController, WKUIDelegate {
             self.timer.invalidate()
         }
     }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

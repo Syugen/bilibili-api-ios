@@ -16,6 +16,7 @@ class UserSearchController: UITableViewController {
     @IBOutlet weak var videoamount: UILabel!
     @IBOutlet weak var following: UILabel!
     @IBOutlet weak var follower: UILabel!
+    @IBOutlet weak var levelInfoView: UserLevelInfoView!
     @IBOutlet weak var gender: UILabel!
     @IBOutlet weak var birthday: UILabel!
     @IBOutlet weak var location: UILabel!
@@ -173,6 +174,18 @@ class UserSearchController: UITableViewController {
                 self.set_image(self.upImage, data["face"] as! String)
                 let sign = data["sign"] as? String
                 self.upsign.text = sign == "" ? "Signature not set" : sign
+                
+                let levelInfo = data["level_info"] as! [String: Any?]
+                self.levelInfoView.curExp = levelInfo["current_exp"] as? Int
+                self.levelInfoView.curLevel = levelInfo["current_level"] as? Int
+                self.levelInfoView.nextExp = levelInfo["next_exp"] as? Int
+                self.levelInfoView.setNeedsDisplay()
+                let levelViewWidth = self.levelInfoView.frame.size.width
+                self.levelInfoView.frame.size.width = 0
+                UIView.animate(withDuration: 1.0, animations: {
+                    self.levelInfoView.frame.size.width = levelViewWidth
+                })
+                
                 let gender = ["": "Not set", "男": "Male", "女": "Female"]
                 self.gender.text = gender[data["sex"] as! String]
                 let birthday = data["birthday"] as! String

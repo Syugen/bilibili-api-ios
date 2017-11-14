@@ -70,6 +70,7 @@ class VideoSearchController: UITableViewController {
         self.videoImage.image = nil
         self.desc.text = ""
         self.info_set = false
+        self.uid = nil
         self.favoriteIcon.setImage(UIImage(named: "notfavorite"), for: UIControlState.normal)
     }
     
@@ -176,7 +177,7 @@ class VideoSearchController: UITableViewController {
             }
         } else if type == "webpage" {
             if json["error"] as? Bool == true {
-                self.upsign.text = "Failed to uploader infomation"
+                //self.upsign.text = "Failed to uploader infomation"
                 return
             } else {
                 if self.info_set == false {
@@ -249,11 +250,19 @@ class VideoSearchController: UITableViewController {
             let controller = segue.destination as! WebKitController
             controller.urlStr = self.aid
         } else if segue.identifier == "uploader" {
-            let vcDest = segue.destination as! UserSearchController
-            vcDest.searchBar.text = self.uid
-            vcDest.searchButtonPressed = true
-        } else {
-            
+            if self.uid != nil {
+                let vcDest = segue.destination as! UserSearchController
+                vcDest.searchBar.text = self.uid
+                vcDest.searchButtonPressed = true
+            } else {
+                let alertController = UIAlertController(title: "Cannot visit", message:
+                    "This video is probably a movie or an episode of a bangumi, and its webpage layout is different from a usual one, thus the user ID of the uploader is not loaded, thus unable to view their profile.", preferredStyle: UIAlertControllerStyle.alert)
+                alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alertController, animated: true, completion: nil)
+            }
+        } else if segue.identifier == "description" {
+            let vcDest = segue.destination as! VideoDescriptionController
+            vcDest.descriptionText.text = self.desc.text
         }
     }
     
