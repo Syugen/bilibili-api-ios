@@ -74,20 +74,20 @@ class UserSearchController: UITableViewController {
     }
     
     @objc func favoritePressed() {
-        if let index = FavoriteDB.sharedInstance.videoIDs.index(of: self.uid) {
+        if let index = FavoriteDB.sharedInstance.userIDs.index(of: self.uid) {
             self.favoriteIcon.setImage(UIImage(named: "notfavorite"), for: UIControlState.normal)
-            FavoriteDB.sharedInstance.userIDs.remove(at: index)
             FavoriteDB.sharedInstance.userNames.remove(at: index)
             FavoriteDB.sharedInstance.userImgs.remove(at: index)
+            FavoriteDB.sharedInstance.userIDs.remove(at: index)
             let alertController = UIAlertController(title: "Favorite removed", message:
                 "This user has been removed from your favorite collection.", preferredStyle: UIAlertControllerStyle.alert)
             alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
             self.present(alertController, animated: true, completion: nil)
         } else {
             self.favoriteIcon.setImage(UIImage(named: "favorite"), for: UIControlState.normal)
-            FavoriteDB.sharedInstance.userIDs.append(self.uid)
             FavoriteDB.sharedInstance.userNames.append(self.upName.text)
             FavoriteDB.sharedInstance.userImgs.append(self.upImage.image)
+            FavoriteDB.sharedInstance.userIDs.append(self.uid)
             let alertController = UIAlertController(title: "Favorite added", message:
                 "This user has been added to your favorite collection.", preferredStyle: UIAlertControllerStyle.alert)
             alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))

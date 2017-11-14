@@ -69,6 +69,15 @@ class VideoSearchController: UITableViewController {
         self.upsign.text = ""
         self.videoImage.image = nil
         self.desc.text = ""
+        self.viewCount.text = ""
+        self.danmakuCount.text = ""
+        self.replyCount.text = ""
+        self.favoriteCount.text = ""
+        self.coinCount.text = ""
+        self.ShareCount.text = ""
+        self.curRanking.text = ""
+        self.hisRanking.text = ""
+        self.copyright.text = ""
         self.info_set = false
         self.uid = nil
         self.favoriteIcon.setImage(UIImage(named: "notfavorite"), for: UIControlState.normal)
@@ -81,18 +90,18 @@ class VideoSearchController: UITableViewController {
     @objc func favoritePressed() {
         if let index = FavoriteDB.sharedInstance.videoIDs.index(of: self.aid) {
             self.favoriteIcon.setImage(UIImage(named: "notfavorite"), for: UIControlState.normal)
-            FavoriteDB.sharedInstance.videoIDs.remove(at: index)
             FavoriteDB.sharedInstance.videoTitles.remove(at: index)
             FavoriteDB.sharedInstance.videoImgs.remove(at: index)
+            FavoriteDB.sharedInstance.videoIDs.remove(at: index)
             let alertController = UIAlertController(title: "Favorite removed", message:
                 "This video has been removed from your favorite collection.", preferredStyle: UIAlertControllerStyle.alert)
             alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
             self.present(alertController, animated: true, completion: nil)
         } else {
             self.favoriteIcon.setImage(UIImage(named: "favorite"), for: UIControlState.normal)
-            FavoriteDB.sharedInstance.videoIDs.append(self.aid)
             FavoriteDB.sharedInstance.videoTitles.append(self.videoName.text)
             FavoriteDB.sharedInstance.videoImgs.append(self.videoImage.image)
+            FavoriteDB.sharedInstance.videoIDs.append(self.aid)
             let alertController = UIAlertController(title: "Favorite added", message:
                 "This video has been added to your favorite collection.", preferredStyle: UIAlertControllerStyle.alert)
             alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))

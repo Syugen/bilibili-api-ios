@@ -20,7 +20,12 @@ class UserMainController: UIViewController, UITableViewDataSource, UITableViewDe
         favoriteTable.rowHeight = 70
         
         NotificationCenter.default.addObserver(forName: NSNotification.Name(UserDBChange), object: FavoriteDB.sharedInstance, queue: nil) {
-            (NSNotification) in self.favoriteTable.reloadData()
+            (NSNotification) in
+            self.favoriteTable.reloadData()
+            let userImages = NSKeyedArchiver.archivedData(withRootObject: FavoriteDB.sharedInstance.userImgs)
+            UserDefaults.standard.set(userImages, forKey: UserImgs)
+            UserDefaults.standard.set(FavoriteDB.sharedInstance.userIDs, forKey: UserIDs)
+            UserDefaults.standard.set(FavoriteDB.sharedInstance.userNames, forKey: UserNames)
         }
     }
 

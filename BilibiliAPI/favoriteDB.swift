@@ -12,22 +12,69 @@ import UIKit
 let VideoDBChange = "VIDEO_DB_CHANGED"
 let UserDBChange = "USER_DB_CHANGED"
 
+let VideoImgs = "VIDEO_IMGS"
+let VideoIDs = "VIDEO_IDS"
+let VideoTitles = "VIDEO_TITLES"
+let UserImgs = "USER_IMGS"
+let UserIDs = "USER_IDS"
+let UserNames = "USER_NAMES"
+
 class FavoriteDB {
     static var sharedInstance = FavoriteDB()
     
-    var videoIDs: [String] = ["170001"] {
+    var videoIDs: [String] {
         didSet {
             NotificationCenter.default.post(name: Notification.Name(VideoDBChange), object: self)
         }
     }
-    var videoTitles: [String?] = ["asdf"]
-    var videoImgs: [UIImage?] = [nil]
+    var videoTitles: [String?]
+    var videoImgs: [UIImage?]
     
-    var userIDs : [String] = ["7483880"] {
+    var userIDs : [String] {
         didSet {
             NotificationCenter.default.post(name: Notification.Name(UserDBChange), object: self)
         }
     }
-    var userNames: [String?] = ["asdf"]
-    var userImgs: [UIImage?] = [nil]
+    var userNames: [String?]
+    var userImgs: [UIImage?]
+    
+    init() {
+        self.videoIDs = UserDefaults.standard.object(forKey: VideoIDs) as? [String] ?? []
+        self.videoTitles = UserDefaults.standard.object(forKey: VideoTitles) as? [String?] ?? []
+        if let imgs = UserDefaults.standard.object(forKey: VideoImgs) as? Data {
+            self.videoImgs = NSKeyedUnarchiver.unarchiveObject(with: imgs) as? [UIImage?] ?? []
+        } else {
+            self.videoImgs = []
+        }
+        
+        self.userIDs = UserDefaults.standard.object(forKey: UserIDs) as? [String] ?? []
+        self.userNames = UserDefaults.standard.object(forKey: UserNames) as? [String?] ?? []
+        if let imgs = UserDefaults.standard.object(forKey: UserImgs) as? Data {
+            self.userImgs = NSKeyedUnarchiver.unarchiveObject(with: imgs) as? [UIImage?] ?? []
+        } else {
+            self.userImgs = []
+        }
+        
+        if self.videoIDs.count != self.videoTitles.count ||
+            self.videoIDs.count != self.videoImgs.count {
+            let videoImages = NSKeyedArchiver.archivedData(withRootObject: [])
+            UserDefaults.standard.set(videoImages, forKey: VideoImgs)
+            UserDefaults.standard.set([], forKey: VideoIDs)
+            UserDefaults.standard.set([], forKey: VideoTitles)
+            self.videoIDs = []
+            self.videoTitles = []
+            self.videoImgs = []
+        }
+        
+        if self.userIDs.count != self.userNames.count ||
+            self.userIDs.count != self.userImgs.count {
+            let userImages = NSKeyedArchiver.archivedData(withRootObject: [])
+            UserDefaults.standard.set(userImages, forKey: UserImgs)
+            UserDefaults.standard.set([], forKey: UserIDs)
+            UserDefaults.standard.set([], forKey: UserNames)
+            self.userIDs = []
+            self.userNames = []
+            self.userImgs = []
+        }
+    }
 }

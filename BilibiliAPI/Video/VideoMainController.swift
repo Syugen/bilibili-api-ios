@@ -20,7 +20,12 @@ class VideoMainController: UIViewController, UITableViewDataSource, UITableViewD
         favoriteTable.rowHeight = 100
         
         NotificationCenter.default.addObserver(forName: NSNotification.Name(VideoDBChange), object: FavoriteDB.sharedInstance, queue: nil) {
-            (NSNotification) in self.favoriteTable.reloadData()
+            (NSNotification) in
+            self.favoriteTable.reloadData()
+            let videoImages = NSKeyedArchiver.archivedData(withRootObject: FavoriteDB.sharedInstance.videoImgs)
+            UserDefaults.standard.set(videoImages, forKey: VideoImgs)
+            UserDefaults.standard.set(FavoriteDB.sharedInstance.videoIDs, forKey: VideoIDs)
+            UserDefaults.standard.set(FavoriteDB.sharedInstance.videoTitles, forKey: VideoTitles)
         }
     }
 
