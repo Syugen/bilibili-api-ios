@@ -83,26 +83,38 @@ class VideoSearchController: UITableViewController {
             FavoriteDB.sharedInstance.videoIDs.remove(at: index)
             FavoriteDB.sharedInstance.videoTitles.remove(at: index)
             FavoriteDB.sharedInstance.videoImgs.remove(at: index)
+            let alertController = UIAlertController(title: "Favorite removed", message:
+                "This video has been removed from your favorite collection.", preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alertController, animated: true, completion: nil)
         } else {
             self.favoriteIcon.setImage(UIImage(named: "favorite"), for: UIControlState.normal)
             FavoriteDB.sharedInstance.videoIDs.append(self.aid)
             FavoriteDB.sharedInstance.videoTitles.append(self.videoName.text)
             FavoriteDB.sharedInstance.videoImgs.append(self.videoImage.image)
+            let alertController = UIAlertController(title: "Favorite added", message:
+                "This video has been added to your favorite collection.", preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alertController, animated: true, completion: nil)
         }
     }
     
     func search() {
         self.reset_views()
-        self.statTable.isHidden = false
-        self.aid = self.searchBar.text
-        self.videoName.text = "Searching " + self.aid
         self.searchBar.resignFirstResponder()
-        if Int(self.searchBar.text!) == nil {
+        
+        self.aid = self.searchBar.text
+        if Int(self.aid) == nil {
             let alertController = UIAlertController(title: "Error", message:
                 "Video ID should be an integer", preferredStyle: UIAlertControllerStyle.alert)
             alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
             self.present(alertController, animated: true, completion: nil)
         } else {
+            self.statTable.isHidden = false
+            self.videoName.text = "Searching video ID " + self.aid
+            if FavoriteDB.sharedInstance.videoIDs.contains(self.aid) {
+                self.favoriteIcon.setImage(UIImage(named: "favorite"), for: UIControlState.normal)
+            }
             get_request("bili_video", "https://api.bilibili.com/archive_stat/stat?aid=" + self.searchBar.text!)
             get_request("jiji_video", "http://www.jijidown.com/Api/AvToCid/" + self.aid)
             get_request("webpage", "http://bili.utoptutor.com/videopage?aid=" + self.aid)
@@ -174,7 +186,8 @@ class VideoSearchController: UITableViewController {
                     self.set_image(self.upImage, json["upAvatar"] as! String)
                 }
                 self.info_set = true
-                self.upsign.text = json["upSign"] as? String
+                let sign = json["upSign"] as? String
+                self.upsign.text = sign == "" ? "Signature not set" : sign
                 
                 self.uid = json["uid"] as! String
                 get_request("video_amount", "http://api.bilibili.com/x/space/navnum?mid=" + self.uid)

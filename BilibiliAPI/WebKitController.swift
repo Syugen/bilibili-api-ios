@@ -10,15 +10,25 @@ import UIKit
 import WebKit
 
 class WebKitController: UIViewController, WKUIDelegate {
-
     var webView: WKWebView!
+    var progressView: UIProgressView!
     var urlStr: String!
+    var finished: Bool!
+    var timer: Timer!
     
     override func loadView() {
-        let webConfiguration = WKWebViewConfiguration()
-        webView = WKWebView(frame: .zero, configuration: webConfiguration)
-        webView.uiDelegate = self
-        view = webView
+        self.webView = WKWebView(frame: .zero, configuration: WKWebViewConfiguration())
+        self.webView.uiDelegate = self
+        view = self.webView
+        
+        self.finished = false
+        self.timer = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(timerCallback), userInfo: nil, repeats: true)
+        
+        self.progressView = UIProgressView()
+        view.addSubview(self.progressView)
+        let navFrame = navigationController?.navigationBar.frame
+        let y = (navFrame?.origin.y)! + (navFrame?.size.height)! + 1
+        self.progressView.frame = CGRect(x: 0, y: y, width: (navFrame?.size.width)!, height: 1)
     }
     
     override func viewDidLoad() {
@@ -26,7 +36,7 @@ class WebKitController: UIViewController, WKUIDelegate {
 
         let myURL = URL(string: "https://www.bilibili.com/video/av" + self.urlStr + "/")
         let myRequest = URLRequest(url: myURL!)
-        webView.load(myRequest)
+        self.webView.load(myRequest)
     }
 
     override func didReceiveMemoryWarning() {
@@ -34,7 +44,15 @@ class WebKitController: UIViewController, WKUIDelegate {
         // Dispose of any resources that can be recreated.
     }
     
-
+    @objc func timerCallback() {
+        if self.webView.isLoading {
+            self.progressView.progress = Float(webView.estimatedProgress)
+        } else {
+            self.progressView.isHidden = true
+            self.timer.invalidate()
+        }
+    }
+    
     /*
     // MARK: - Navigation
 

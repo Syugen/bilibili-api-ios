@@ -16,7 +16,14 @@ class UserSearchController: UITableViewController {
     @IBOutlet weak var videoamount: UILabel!
     @IBOutlet weak var following: UILabel!
     @IBOutlet weak var follower: UILabel!
+    @IBOutlet weak var gender: UILabel!
+    @IBOutlet weak var birthday: UILabel!
+    @IBOutlet weak var location: UILabel!
+    @IBOutlet weak var totalview: UILabel!
+    @IBOutlet weak var regdate: UILabel!
+    @IBOutlet weak var badge: UILabel!
     @IBOutlet weak var favoriteIcon: UIButton!
+    
     @IBOutlet var statTable: UITableView!
     
     let searchBar = UISearchBar()
@@ -52,6 +59,12 @@ class UserSearchController: UITableViewController {
         self.videoamount.text = ""
         self.following.text = ""
         self.follower.text = ""
+        self.gender.text = ""
+        self.birthday.text = ""
+        self.location.text = ""
+        self.totalview.text = ""
+        self.regdate.text = ""
+        self.badge.text = ""
         self.favoriteIcon.setImage(UIImage(named: "notfavorite"), for: UIControlState.normal)
     }
 
@@ -65,26 +78,39 @@ class UserSearchController: UITableViewController {
             FavoriteDB.sharedInstance.userIDs.remove(at: index)
             FavoriteDB.sharedInstance.userNames.remove(at: index)
             FavoriteDB.sharedInstance.userImgs.remove(at: index)
+            let alertController = UIAlertController(title: "Favorite removed", message:
+                "This user has been removed from your favorite collection.", preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alertController, animated: true, completion: nil)
         } else {
             self.favoriteIcon.setImage(UIImage(named: "favorite"), for: UIControlState.normal)
             FavoriteDB.sharedInstance.userIDs.append(self.uid)
             FavoriteDB.sharedInstance.userNames.append(self.upName.text)
             FavoriteDB.sharedInstance.userImgs.append(self.upImage.image)
+            let alertController = UIAlertController(title: "Favorite added", message:
+                "This user has been added to your favorite collection.", preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alertController, animated: true, completion: nil)
         }
     }
     
     func search() {
         self.reset_views()
-        self.statTable.isHidden = false
-        self.uid = self.searchBar.text
-        self.upName.text = "Searching " + self.uid
         self.searchBar.resignFirstResponder()
-        if Int(self.searchBar.text!) == nil {
+        
+        self.uid = self.searchBar.text
+        if Int(self.uid) == nil {
             let alertController = UIAlertController(title: "Error", message:
                 "Video ID should be an integer", preferredStyle: UIAlertControllerStyle.alert)
             alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
             self.present(alertController, animated: true, completion: nil)
         } else {
+            self.statTable.isHidden = false
+            self.upName.text = "Searching user ID " + self.uid
+            if FavoriteDB.sharedInstance.userIDs.contains(self.uid) {
+                self.favoriteIcon.setImage(UIImage(named: "favorite"), for: UIControlState.normal)
+            }
+            post_request("user_info", "http://space.bilibili.com/ajax/member/GetInfo")
             get_request("video_amount", "http://api.bilibili.com/x/space/navnum?mid=" + self.uid)
             get_request("follow_amount", "http://api.bilibili.com/x/relation/stat?vmid=" + self.uid)
         }
@@ -110,13 +136,59 @@ class UserSearchController: UITableViewController {
         task.resume()
     }
     
+    func post_request(_ type: String, _ urlstr: String) {
+        let url: NSURL = NSURL(string: urlstr)!
+        let request = NSMutableURLRequest(url: url as URL)
+        request.httpMethod = "POST"
+        
+        let paramString = "mid=" + self.uid
+        request.httpBody = paramString.data(using: String.Encoding.utf8)
+        request.setValue("https://space.bilibili.com/" + self.uid + "/", forHTTPHeaderField: "Referer")
+        let task = URLSession.shared.dataTask(with: request as URLRequest) {
+            (data, response, error) in
+            if let data = data/*NSString(data: data!, encoding: String.Encoding.utf8.rawValue)*/ {
+                do {
+                    // Convert the data to JSON
+                    let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
+                    DispatchQueue.main.async(execute: {
+                        self.displayInfo(type, json)
+                    })
+                }  catch let error as NSError {
+                    print(error.localizedDescription)
+                }
+            } else if let error = error {
+                print(error.localizedDescription)
+            }
+        }
+        task.resume()
+    }
+    
     func displayInfo(_ type: String, _ json: [String: Any]) {
-        if type == "bili_video" {
-            
-        } else if type == "jiji_video" {
-            
-        } else if type == "webpage" {
-            
+        if type == "user_info" {
+            if json["status"] as! Bool == false {
+                // Unknown error
+            } else {
+                let data = json["data"] as! [String: Any?]
+                self.upName.text = data["name"] as? String
+                self.set_image(self.upImage, data["face"] as! String)
+                let sign = data["sign"] as? String
+                self.upsign.text = sign == "" ? "Signature not set" : sign
+                let gender = ["": "Not set", "男": "Male", "女": "Female"]
+                self.gender.text = gender[data["sex"] as! String]
+                let birthday = data["birthday"] as! String
+                let index = birthday.index(birthday.startIndex, offsetBy: 5)
+                self.birthday.text = String(birthday[index...])
+                let location = data["place"] as! String
+                self.location.text = location == "" ? "Not set" : location
+                self.totalview.text = String(data["playNum"] as! Int)
+                let timeResult = data["regtime"] as! Int
+                let date = NSDate(timeIntervalSince1970: TimeInterval(timeResult))
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+                let localDate = dateFormatter.string(from: date as Date)
+                self.regdate.text = localDate
+                self.badge.text = data["fans_badge"] as! Bool ? "Available" : "Not Available"
+            }
         } else if type == "video_amount" {
             if json["code"] as! Int != 0 {
                 //self.videoName.text = "Video not found"
