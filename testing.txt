@@ -4,5 +4,3 @@ Some hints on inputs (frequent Bilibili users should have known these):
 
 2. For User ID, just try some number with no more than 7 digits. Most of them should work. 7483880 is me. 883968, 122879, and 1532165 are some famous uploaders.
 
-Known bug(s):
-- Doesn't disable user interaction when the content is not fully loaded in Video / User Search scene. It might crash if user attempts to tap on a button / cell.

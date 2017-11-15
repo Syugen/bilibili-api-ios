@@ -16,7 +16,10 @@ class UserSearchController: UITableViewController {
     @IBOutlet weak var videoamount: UILabel!
     @IBOutlet weak var following: UILabel!
     @IBOutlet weak var follower: UILabel!
+    @IBOutlet weak var videoamountCell: UITableViewCell!
     @IBOutlet weak var levelInfoView: UserLevelInfoView!
+    @IBOutlet weak var followingCell: UITableViewCell!
+    @IBOutlet weak var followerCell: UITableViewCell!
     @IBOutlet weak var gender: UILabel!
     @IBOutlet weak var birthday: UILabel!
     @IBOutlet weak var location: UILabel!
@@ -30,6 +33,7 @@ class UserSearchController: UITableViewController {
     let searchBar = UISearchBar()
     var searchButtonPressed = false
     var uid: String!
+    var taskFinished = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -66,6 +70,16 @@ class UserSearchController: UITableViewController {
         self.totalview.text = ""
         self.regdate.text = ""
         self.badge.text = ""
+        self.levelInfoView.isHidden = true
+        self.taskFinished = 0
+        self.videoamountCell.isUserInteractionEnabled = false
+        self.followingCell.isUserInteractionEnabled = false
+        self.followerCell.isUserInteractionEnabled = false
+        self.videoamountCell.isUserInteractionEnabled = false
+        self.videoamountCell.accessoryType = UITableViewCellAccessoryType.none
+        self.followingCell.accessoryType = UITableViewCellAccessoryType.none
+        self.followerCell.accessoryType = UITableViewCellAccessoryType.none
+        self.favoriteIcon.isHidden = true
         self.favoriteIcon.setImage(UIImage(named: "notfavorite"), for: UIControlState.normal)
     }
 
@@ -167,17 +181,18 @@ class UserSearchController: UITableViewController {
     func displayInfo(_ type: String, _ json: [String: Any]) {
         if type == "user_info" {
             if json["status"] as! Bool == false {
-                // Unknown error
+                self.upName.text = "User does not exist"
             } else {
                 let data = json["data"] as! [String: Any?]
                 self.upName.text = data["name"] as? String
                 if FavoriteDB.sharedInstance.downloadImage {
-                    self.setImage(self.upImage, data["face"] as! String)
+                    self.setImage(self.upImage, data["face"] as? String)
                 }
                 let sign = data["sign"] as? String
                 self.upsign.text = sign == "" ? "Signature not set" : sign
                 
                 let levelInfo = data["level_info"] as! [String: Any?]
+                self.levelInfoView.isHidden = false
                 self.levelInfoView.curExp = levelInfo["current_exp"] as? Int
                 self.levelInfoView.curLevel = levelInfo["current_level"] as? Int
                 self.levelInfoView.nextExp = levelInfo["next_exp"] as? Int
@@ -192,16 +207,17 @@ class UserSearchController: UITableViewController {
                     let index = birthday.index(birthday.startIndex, offsetBy: 5)
                     self.birthday.text = String(birthday[index...])
                     let gender = ["": "Not set", "男": "Male", "女": "Female"]
-                    self.gender.text = gender[data["sex"] as! String]
-                    let location = data["place"] as! String
+                    self.gender.text = gender[data["sex"] as? String ?? ""]
+                    let location = data["place"] as? String ?? ""
                     self.location.text = location == "" ? "Not set" : location
                     
-                    let timeResult = data["regtime"] as! Int
-                    let date = NSDate(timeIntervalSince1970: TimeInterval(timeResult))
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
-                    let localDate = dateFormatter.string(from: date as Date)
-                    self.regdate.text = localDate
+                    if let timeResult = data["regtime"] as? Int {
+                        let date = NSDate(timeIntervalSince1970: TimeInterval(timeResult))
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+                        let localDate = dateFormatter.string(from: date as Date)
+                        self.regdate.text = localDate
+                    }
                 } else {
                     self.birthday.text = "Secret"
                     self.gender.text = "Secret"
@@ -210,29 +226,45 @@ class UserSearchController: UITableViewController {
                 }
                 self.totalview.text = String(data["playNum"] as! Int)
                 self.badge.text = data["fans_badge"] as! Bool ? "Available" : "Not Available"
+                enableInteraction();
             }
         } else if type == "video_amount" {
             if json["code"] as! Int != 0 {
                 //self.videoName.text = "Video not found"
             } else {
                 let data = json["data"] as! [String: Any?]
-                self.videoamount.text = String(data["video"] as! Int)
+                self.videoamount.text = String(data["video"] as? Int ?? 0)
+                enableInteraction();
             }
         } else if type == "follow_amount" {
             if json["code"] as! Int != 0 {
                 //self.videoName.text = "Video not found"
             } else {
                 let data = json["data"] as! [String: Any?]
-                self.following.text = String(data["following"] as! Int)
-                self.follower.text = String(data["follower"] as! Int)
+                self.following.text = String(data["following"] as? Int ?? 0)
+                self.follower.text = String(data["follower"] as? Int ?? 0)
+                enableInteraction();
             }
         }
     }
     
-    func setImage(_ image_view: UIImageView, _ urlstr: String) {
-        if let imgurl = URL(string: urlstr) {
-            let img = try? Data(contentsOf: imgurl)
-            image_view.image = UIImage(data: img!)
+    func setImage(_ image_view: UIImageView, _ urlstr: String?) {
+        if let url = urlstr, let imgurl = URL(string: url),
+            let img = try? Data(contentsOf: imgurl){
+            image_view.image = UIImage(data: img)
+        }
+    }
+    
+    func enableInteraction() {
+        self.taskFinished += 1
+        if self.taskFinished == 3 {
+            self.favoriteIcon.isHidden = false
+            self.videoamountCell.isUserInteractionEnabled = true
+            self.followingCell.isUserInteractionEnabled = true
+            self.followerCell.isUserInteractionEnabled = true
+            self.videoamountCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+            self.followingCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+            self.followerCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
         }
     }
     

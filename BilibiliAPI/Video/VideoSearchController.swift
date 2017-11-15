@@ -29,11 +29,15 @@ class VideoSearchController: UITableViewController {
     @IBOutlet weak var hisRanking: UILabel!
     @IBOutlet weak var copyright: UILabel!
     @IBOutlet weak var favoriteIcon: UIButton!
+    @IBOutlet weak var uploaderCell: UITableViewCell!
+    @IBOutlet weak var descriptionCell: UITableViewCell!
+    @IBOutlet weak var videoTitleCell: UITableViewCell!
     @IBOutlet var statTable: UITableView!
     
     let searchBar = UISearchBar()
     var searchButtonPressed = false
     var info_set = false
+    var DNE = false
     var aid: String!
     var uid: String!
 
@@ -80,6 +84,14 @@ class VideoSearchController: UITableViewController {
         self.copyright.text = ""
         self.info_set = false
         self.uid = nil
+        self.DNE = false
+        self.videoTitleCell.isUserInteractionEnabled = false
+        self.uploaderCell.isUserInteractionEnabled = false
+        self.descriptionCell.isUserInteractionEnabled = false
+        self.videoTitleCell.accessoryType = UITableViewCellAccessoryType.none
+        self.uploaderCell.accessoryType = UITableViewCellAccessoryType.none
+        self.descriptionCell.accessoryType = UITableViewCellAccessoryType.none
+        self.favoriteIcon.isHidden = true
         self.favoriteIcon.setImage(UIImage(named: "notfavorite"), for: UIControlState.normal)
     }
     
@@ -155,37 +167,45 @@ class VideoSearchController: UITableViewController {
         if type == "bili_video" {
             if json["code"] as! Int != 0 {
                 self.videoName.text = "Video doesn't exist"
+                self.DNE = true
             } else {
                 let data = json["data"] as! [String: Any?]
-                self.viewCount.text = String(data["view"] as! Int)
-                self.danmakuCount.text = String(data["danmaku"] as! Int)
-                self.replyCount.text = String(data["reply"] as! Int)
-                self.favoriteCount.text = String(data["favorite"] as! Int)
-                self.coinCount.text = String(data["coin"] as! Int)
-                self.ShareCount.text = String(data["share"] as! Int)
-                let curRankInt = data["now_rank"] as! Int
-                let hisRankInt = data["his_rank"] as! Int
-                let copyrightInt = data["copyright"] as! Int
+                self.viewCount.text = String(data["view"] as? Int ?? 0)
+                self.danmakuCount.text = String(data["danmaku"] as? Int ?? 0)
+                self.replyCount.text = String(data["reply"] as? Int ?? 0)
+                self.favoriteCount.text = String(data["favorite"] as? Int ?? 0)
+                self.coinCount.text = String(data["coin"] as? Int ?? 0)
+                self.ShareCount.text = String(data["share"] as? Int ?? 0)
+                let curRankInt = data["now_rank"] as? Int ?? 0
+                let hisRankInt = data["his_rank"] as? Int ?? 0
+                let copyrightInt = data["copyright"] as? Int ?? 0
                 self.curRanking.text = curRankInt == 0 ? ">100" :  String(curRankInt)
                 self.hisRanking.text = hisRankInt == 0 ? ">1000" :  String(hisRankInt)
                 self.copyright.text = copyrightInt == 1 ? "Yes" : "No"
             }
         } else if type == "jiji_video" {
-            if json["code"] as! Int != 0 || json["maxpage"] as! Int == 0 {
+            if json["code"] as! Int != 0 /*|| json["maxpage"] as! Int == 0*/ {
                 // TODO: set videoimage as defaulf "not found" image
                 return
             } else {
                 if self.info_set == false {
-                    self.videoName.text = json["title"] as? String
+                    self.info_set = true
+                    if !self.DNE {
+                        self.videoName.text = json["title"] as? String ?? "Video may be deleted"
+                        self.favoriteIcon.isHidden = false
+                        self.videoTitleCell.isUserInteractionEnabled = true
+                        self.videoTitleCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+                    }
                     self.upName.text = json["up"] as? String
                     self.desc.text = json["desc"] as? String
                     if FavoriteDB.sharedInstance.downloadImage {
-                        self.setImage(self.upImage, json["upimg"] as! String)
+                        self.setImage(self.upImage, json["upimg"] as? String)
                     }
+                    self.descriptionCell.isUserInteractionEnabled = true
+                    self.descriptionCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
                 }
-                self.info_set = true
                 if FavoriteDB.sharedInstance.downloadImage {
-                    self.setImage(self.videoImage, json["img"] as! String)
+                    self.setImage(self.videoImage, json["img"] as? String)
                 }
             }
         } else if type == "webpage" {
@@ -194,46 +214,57 @@ class VideoSearchController: UITableViewController {
                 return
             } else {
                 if self.info_set == false {
-                    self.videoName.text = json["title"] as? String
+                    self.info_set = true
+                    if !self.DNE {
+                        self.videoName.text = json["title"] as? String
+                        self.favoriteIcon.isHidden = false
+                        self.videoTitleCell.isUserInteractionEnabled = true
+                        self.videoTitleCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+                    }
                     self.upName.text = json["upName"] as? String
                     self.desc.text = json["description"] as? String
                     if FavoriteDB.sharedInstance.downloadImage {
-                        self.setImage(self.upImage, json["upAvatar"] as! String)
+                        self.setImage(self.upImage, json["upAvatar"] as? String)
                     }
+                    self.favoriteIcon.isHidden = false
+                    self.videoTitleCell.isUserInteractionEnabled = true
+                    self.descriptionCell.isUserInteractionEnabled = true
+                    self.videoTitleCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+                    self.descriptionCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
                 }
-                self.info_set = true
                 let sign = json["upSign"] as? String
                 self.upsign.text = sign == "" ? "Signature not set" : sign
                 
                 self.uid = json["uid"] as! String
                 get_request("video_amount", "http://api.bilibili.com/x/space/navnum?mid=" + self.uid)
                 get_request("follow_amount", "http://api.bilibili.com/x/relation/stat?vmid=" + self.uid)
+                self.uploaderCell.isUserInteractionEnabled = true
+                self.uploaderCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
             }
         } else if type == "video_amount" {
             if json["code"] as! Int != 0 {
                 //self.videoName.text = "Video not found"
             } else {
                 let data = json["data"] as! [String: Any?]
-                self.videoamount.text = "(" + String(data["video"] as! Int) + " videos)"
+                self.videoamount.text = "(" + String(data["video"] as? Int ?? 0) + " videos)"
             }
         } else if type == "follow_amount" {
             if json["code"] as! Int != 0 {
                 //self.videoName.text = "Video not found"
             } else {
                 let data = json["data"] as! [String: Any?]
-                self.following.text = "Following: " + String(data["following"] as! Int)
-                self.follower.text = "Follower: " + String(data["follower"] as! Int)
+                self.following.text = "Following: " + String(data["following"] as? Int ?? 0)
+                self.follower.text = "Follower: " + String(data["follower"] as? Int ?? 0)
             }
         }
     }
     
-    func setImage(_ image_view: UIImageView, _ urlstr: String) {
-        if let imgurl = URL(string: urlstr) {
+    func setImage(_ image_view: UIImageView, _ urlstr: String?) {
+        if let url = urlstr, let imgurl = URL(string: url) {
             let img = try? Data(contentsOf: imgurl)
             image_view.image = UIImage(data: img!)
         }
     }
-    
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)

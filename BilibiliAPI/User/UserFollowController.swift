@@ -65,7 +65,7 @@ class UserFollowController: UITableViewController {
     func displayInfo(_ type: String, _ json: [String: Any]) {
         if json["code"] as! Int != 0 {
             let alertController = UIAlertController(title: "Error", message:
-                "Failed to load user's following list.", preferredStyle: UIAlertControllerStyle.alert)
+                "Failed to load user's following list. You may try again.", preferredStyle: UIAlertControllerStyle.alert)
             alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
             self.present(alertController, animated: true, completion: nil)
         } else {

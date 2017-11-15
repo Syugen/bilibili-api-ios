@@ -1029,6 +1029,7 @@
                         <outlet property="curRanking" destination="O3Z-aY-awY" id="jjw-4S-isU"/>
                         <outlet property="danmakuCount" destination="qh6-QY-vAj" id="IPj-8s-6Ro"/>
                         <outlet property="desc" destination="URg-lb-Idp" id="qUn-SJ-ecn"/>
+                        <outlet property="descriptionCell" destination="BTY-lJ-n46" id="AJI-ms-ZP5"/>
                         <outlet property="favoriteCount" destination="Amn-QH-0Eo" id="hEk-cB-qnF"/>
                         <outlet property="favoriteIcon" destination="BQV-E7-nIw" id="9Mj-04-NQ6"/>
                         <outlet property="follower" destination="e5p-Yy-I90" id="LWT-AO-kzZ"/>
@@ -1038,9 +1039,11 @@
                         <outlet property="statTable" destination="8V7-w9-2DS" id="KkV-8C-nZ8"/>
                         <outlet property="upImage" destination="rWj-Xq-jjh" id="OJn-4M-yHd"/>
                         <outlet property="upName" destination="f2o-aM-8Xj" id="cDF-Tu-pHD"/>
+                        <outlet property="uploaderCell" destination="RoU-U6-tz8" id="aBL-gx-kfo"/>
                         <outlet property="upsign" destination="qZI-CJ-vJD" id="Zxt-3Q-80u"/>
                         <outlet property="videoImage" destination="589-mo-0jG" id="l54-Z2-RLq"/>
                         <outlet property="videoName" destination="aCi-vI-zMC" id="QhK-Jc-1wL"/>
+                        <outlet property="videoTitleCell" destination="FnS-OM-GH0" id="S4Y-2O-qzG"/>
                         <outlet property="videoamount" destination="wnd-9h-kkW" id="tUe-jK-9FR"/>
                         <outlet property="viewCount" destination="LjK-EM-S3K" id="La5-NW-6eu"/>
                     </connections>
@@ -1525,7 +1528,9 @@
                         <outlet property="birthday" destination="3RO-9k-mNb" id="saw-ml-8eW"/>
                         <outlet property="favoriteIcon" destination="m9z-Nb-jZG" id="l8P-6Q-UNh"/>
                         <outlet property="follower" destination="w9e-ei-zvk" id="vxl-0u-LZk"/>
+                        <outlet property="followerCell" destination="j37-Le-MeK" id="Tea-qz-wVl"/>
                         <outlet property="following" destination="y2v-Mr-07y" id="CAI-jE-7ak"/>
+                        <outlet property="followingCell" destination="6a6-yU-hhs" id="gSb-hb-Jf9"/>
                         <outlet property="gender" destination="HNo-Nl-5Im" id="mse-C2-F1u"/>
                         <outlet property="levelInfoView" destination="hG0-RI-XSI" id="xkS-sj-rrr"/>
                         <outlet property="location" destination="oah-4u-y8g" id="qUY-sD-5Lf"/>
@@ -1536,6 +1541,7 @@
                         <outlet property="upName" destination="FGC-MX-hgW" id="HhO-LP-lSR"/>
                         <outlet property="upsign" destination="cij-3s-0gA" id="mql-2g-5gJ"/>
                         <outlet property="videoamount" destination="4en-DW-5Sa" id="Hyg-i9-HGV"/>
+                        <outlet property="videoamountCell" destination="rWg-Jj-Xe3" id="rBp-D5-Jq4"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bPr-YS-e5G" userLabel="First Responder" sceneMemberID="firstResponder"/>
