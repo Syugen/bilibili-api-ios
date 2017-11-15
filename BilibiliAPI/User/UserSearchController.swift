@@ -188,20 +188,27 @@ class UserSearchController: UITableViewController {
                     self.levelInfoView.frame.size.width = levelViewWidth
                 })
                 
-                let gender = ["": "Not set", "男": "Male", "女": "Female"]
-                self.gender.text = gender[data["sex"] as! String]
-                let birthday = data["birthday"] as! String
-                let index = birthday.index(birthday.startIndex, offsetBy: 5)
-                self.birthday.text = String(birthday[index...])
-                let location = data["place"] as! String
-                self.location.text = location == "" ? "Not set" : location
+                if let birthday = data["birthday"] as? String {
+                    let index = birthday.index(birthday.startIndex, offsetBy: 5)
+                    self.birthday.text = String(birthday[index...])
+                    let gender = ["": "Not set", "男": "Male", "女": "Female"]
+                    self.gender.text = gender[data["sex"] as! String]
+                    let location = data["place"] as! String
+                    self.location.text = location == "" ? "Not set" : location
+                    
+                    let timeResult = data["regtime"] as! Int
+                    let date = NSDate(timeIntervalSince1970: TimeInterval(timeResult))
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
+                    let localDate = dateFormatter.string(from: date as Date)
+                    self.regdate.text = localDate
+                } else {
+                    self.birthday.text = "Secret"
+                    self.gender.text = "Secret"
+                    self.location.text = "Secret"
+                    self.regdate.text = "Secret"
+                }
                 self.totalview.text = String(data["playNum"] as! Int)
-                let timeResult = data["regtime"] as! Int
-                let date = NSDate(timeIntervalSince1970: TimeInterval(timeResult))
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "YYYY-MM-dd HH:mm:ss"
-                let localDate = dateFormatter.string(from: date as Date)
-                self.regdate.text = localDate
                 self.badge.text = data["fans_badge"] as! Bool ? "Available" : "Not Available"
             }
         } else if type == "video_amount" {

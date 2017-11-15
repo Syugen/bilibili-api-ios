@@ -40,15 +40,7 @@ class UserVideoController: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
-        return 1
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return self.videoIDs.count
-    }
+    
     
     func get_request(_ type: String, _ urlstr: String) {
         let url = URL(string: urlstr)
@@ -92,11 +84,30 @@ class UserVideoController: UITableViewController {
                 }
             }
         }
+        /*
         if Int(type)! < min(5, self.nPages) {
             let nextPage = String(Int(type)! + 1)
             get_request(nextPage, "http://space.bilibili.com/ajax/member/getSubmitVideos?mid=" + self.uid + "&pagesize=100&tid=0&page=" + nextPage)
-        }
+        }*/
         self.tableView.reloadData()
+    }
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        // #warning Incomplete implementation, return the number of sections
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // #warning Incomplete implementation, return the number of rows
+        return self.videoIDs.count
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if self.nPages > 1 {
+            return "Only shows first 100 results"
+        } else {
+            return ""
+        }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

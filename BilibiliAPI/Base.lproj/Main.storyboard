@@ -1060,15 +1060,15 @@
                         <sections>
                             <tableViewSection headerTitle="Uploader" id="xKM-c8-9d7">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" id="8NV-Se-cu8">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="8NV-Se-cu8">
                                         <rect key="frame" x="0.0" y="55.5" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="8NV-Se-cu8" id="mfl-2L-rv1">
-                                            <rect key="frame" x="0.0" y="0.0" width="287" height="43.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Username" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FGC-MX-hgW">
-                                                    <rect key="frame" x="10" y="9.5" width="227" height="25"/>
+                                                    <rect key="frame" x="10" y="9.5" width="260" height="25"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="25" id="Ryv-ea-7id"/>
                                                     </constraints>
@@ -1077,7 +1077,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VGc-eU-5H0">
-                                                    <rect key="frame" x="247" y="6.5" width="30" height="30"/>
+                                                    <rect key="frame" x="280" y="6.5" width="30" height="30"/>
                                                     <subviews>
                                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="m9z-Nb-jZG">
                                                             <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
