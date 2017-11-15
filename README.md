@@ -41,6 +41,7 @@ Introduction to some major scenes.
 ## Develop
 There are more features being added to this app.
 - Optimize "database"
-- Enable tapping after Video / User Search Scene is fully loaded
+- Enable tapping only after Video / User Search Scene is fully loaded
+- Change the navigation search bar to iOS 11 style
 - More settings
 - ...
