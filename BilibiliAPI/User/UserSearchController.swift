@@ -48,7 +48,7 @@ class UserSearchController: UITableViewController {
         self.statTable.isHidden = true
         self.favoriteIcon.addTarget(self, action: #selector(favoritePressed), for: UIControlEvents.touchUpInside)
         
-        let searchButton = UIBarButtonItem(title: "Search", style: .plain, target: self, action: #selector(searchPressed))
+        let searchButton = UIBarButtonItem(title: "Search".localized, style: .plain, target: self, action: #selector(searchPressed))
         self.navigationItem.setRightBarButton(searchButton, animated: true)
         reset_views()
         if self.searchButtonPressed {
@@ -88,22 +88,22 @@ class UserSearchController: UITableViewController {
     }
     
     @objc func favoritePressed() {
-        if let index = FavoriteDB.sharedInstance.userIDs.index(of: self.uid) {
+        if let index = DB.shared.userIDs.index(of: self.uid) {
             self.favoriteIcon.setImage(UIImage(named: "notfavorite"), for: UIControlState.normal)
-            FavoriteDB.sharedInstance.userNames.remove(at: index)
-            FavoriteDB.sharedInstance.userImgs.remove(at: index)
-            FavoriteDB.sharedInstance.userIDs.remove(at: index)
-            let alertController = UIAlertController(title: "Favorite removed", message:
-                "This user has been removed from your favorite collection.", preferredStyle: UIAlertControllerStyle.alert)
+            DB.shared.userNames.remove(at: index)
+            DB.shared.userImgs.remove(at: index)
+            DB.shared.userIDs.remove(at: index)
+            let alertController = UIAlertController(title: "Favorite removed".localized, message:
+                "This user has been removed from your favorite collection.".localized, preferredStyle: UIAlertControllerStyle.alert)
             alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
             self.present(alertController, animated: true, completion: nil)
         } else {
             self.favoriteIcon.setImage(UIImage(named: "favorite"), for: UIControlState.normal)
-            FavoriteDB.sharedInstance.userNames.append(self.upName.text)
-            FavoriteDB.sharedInstance.userImgs.append(self.upImage.image)
-            FavoriteDB.sharedInstance.userIDs.append(self.uid)
-            let alertController = UIAlertController(title: "Favorite added", message:
-                "This user has been added to your favorite collection.", preferredStyle: UIAlertControllerStyle.alert)
+            DB.shared.userNames.append(self.upName.text)
+            DB.shared.userImgs.append(self.upImage.image)
+            DB.shared.userIDs.append(self.uid)
+            let alertController = UIAlertController(title: "Favorite added".localized, message:
+                "This user has been added to your favorite collection.".localized, preferredStyle: UIAlertControllerStyle.alert)
             alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
             self.present(alertController, animated: true, completion: nil)
         }
@@ -115,101 +115,87 @@ class UserSearchController: UITableViewController {
         
         self.uid = self.searchBar.text
         if Int(self.uid) == nil {
-            let alertController = UIAlertController(title: "Error", message:
-                "Video ID should be an integer", preferredStyle: UIAlertControllerStyle.alert)
-            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            let alertController = UIAlertController(title: "Error".localized, message:
+                "Video ID should be an integer".localized, preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "OK".localized, style: UIAlertActionStyle.default, handler: nil))
             self.present(alertController, animated: true, completion: nil)
         } else {
             self.statTable.isHidden = false
-            self.upName.text = "Searching user ID " + self.uid
-            if FavoriteDB.sharedInstance.userIDs.contains(self.uid) {
+            if DB.shared.userIDs.contains(self.uid) {
                 self.favoriteIcon.setImage(UIImage(named: "favorite"), for: UIControlState.normal)
             }
-            post_request("user_info", "http://space.bilibili.com/ajax/member/GetInfo")
-            get_request("video_amount", "http://api.bilibili.com/x/space/navnum?mid=" + self.uid)
-            get_request("follow_amount", "http://api.bilibili.com/x/relation/stat?vmid=" + self.uid)
+            postRequest("user_info", "http://space.bilibili.com/ajax/member/GetInfo")
+            getRequest("video_amount", "http://api.bilibili.com/x/space/navnum?mid=" + self.uid)
+            getRequest("follow_amount", "http://api.bilibili.com/x/relation/stat?vmid=" + self.uid)
         }
     }
     
-    func get_request(_ type: String, _ urlstr: String) {
+    func getRequest(_ type: String, _ urlstr: String) {
         let url = URL(string: urlstr)
-        let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
-            if let data = data {
-                do {
-                    // Convert the data to JSON
-                    let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-                    DispatchQueue.main.async(execute: {
-                        self.displayInfo(type, json)
-                    })
-                }  catch let error as NSError {
-                    print(error.localizedDescription)
-                }
-            } else if let error = error {
-                print(error.localizedDescription)
-            }
-        }
-        task.resume()
+        URLSession.shared.dataTask(with: url!) { (data, response, error) in
+            DispatchQueue.main.async(execute: { self.parseToJSON(data, type) })
+        }.resume()
     }
     
-    func post_request(_ type: String, _ urlstr: String) {
+    func postRequest(_ type: String, _ urlstr: String) {
         let url: NSURL = NSURL(string: urlstr)!
+        let paramString = "mid=" + self.uid
         let request = NSMutableURLRequest(url: url as URL)
         request.httpMethod = "POST"
-        
-        let paramString = "mid=" + self.uid
         request.httpBody = paramString.data(using: String.Encoding.utf8)
         request.setValue("https://space.bilibili.com/" + self.uid + "/", forHTTPHeaderField: "Referer")
-        let task = URLSession.shared.dataTask(with: request as URLRequest) {
-            (data, response, error) in
-            if let data = data/*NSString(data: data!, encoding: String.Encoding.utf8.rawValue)*/ {
-                do {
-                    // Convert the data to JSON
-                    let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-                    DispatchQueue.main.async(execute: {
-                        self.displayInfo(type, json)
-                    })
-                }  catch let error as NSError {
-                    print(error.localizedDescription)
+        URLSession.shared.dataTask(with: request as URLRequest ) { (data, response, error) in
+            DispatchQueue.main.async(execute: { self.parseToJSON(data, type) })
+        }.resume()
+    }
+    
+    func parseToJSON(_ data: Data?, _ type: String) {
+        if let data = data {
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: [])
+                if let json = json as? [String: Any] {
+                    self.displayInfo(type, json)
                 }
-            } else if let error = error {
-                print(error.localizedDescription)
+            } catch _ as NSError {
+                let alertController = UIAlertController(title: "Error".localized, message:
+                    String(format: "Unfortunately, the JSON data returned by %@ is malformed, so it cannot be processed".localized, "api.bilibili.com"), preferredStyle: UIAlertControllerStyle.alert)
+                alertController.addAction(UIAlertAction(title: "OK".localized, style: UIAlertActionStyle.default, handler: nil))
+                self.present(alertController, animated: true, completion: nil)
             }
         }
-        task.resume()
     }
     
     func displayInfo(_ type: String, _ json: [String: Any]) {
         if type == "user_info" {
-            if json["status"] as! Bool == false {
-                self.upName.text = "User does not exist"
-            } else {
-                let data = json["data"] as! [String: Any?]
-                self.upName.text = data["name"] as? String
-                if FavoriteDB.sharedInstance.downloadImage {
-                    self.setImage(self.upImage, data["face"] as? String)
+            if let status = json["status"] as? Bool, status,
+                let data = json["data"] as? [String: Any?] {
+                self.upName.text = data["name"] as? String ?? "(Unknown)".localized
+                if DB.shared.downloadImage {
+                    setImage(self.upImage, data["face"] as? String)
                 }
                 let sign = data["sign"] as? String
-                self.upsign.text = sign == "" ? "Signature not set" : sign
+                self.upsign.text = sign == "" ? "Signature not set".localized : sign
                 
-                let levelInfo = data["level_info"] as! [String: Any?]
-                self.levelInfoView.isHidden = false
-                self.levelInfoView.curExp = levelInfo["current_exp"] as? Int
-                self.levelInfoView.curLevel = levelInfo["current_level"] as? Int
-                self.levelInfoView.nextExp = levelInfo["next_exp"] as? Int
-                self.levelInfoView.setNeedsDisplay()
-                let levelViewWidth = self.levelInfoView.frame.size.width
-                self.levelInfoView.frame.size.width = 0
-                UIView.animate(withDuration: 1.0, animations: {
-                    self.levelInfoView.frame.size.width = levelViewWidth
-                })
+                if let levelInfo = data["level_info"] as? [String: Any?] {
+                    self.levelInfoView.isHidden = false
+                    self.levelInfoView.curExp = levelInfo["current_exp"] as? Int
+                    self.levelInfoView.curLevel = levelInfo["current_level"] as? Int
+                    self.levelInfoView.nextExp = levelInfo["next_exp"] as? Int
+                    self.levelInfoView.setNeedsDisplay()
+                    let levelViewWidth = self.levelInfoView.frame.size.width
+                    self.levelInfoView.frame.size.width = 0
+                    UIView.animate(withDuration: 1.0, animations: {
+                        self.levelInfoView.frame.size.width = levelViewWidth
+                    })
+                }
                 
                 if let birthday = data["birthday"] as? String {
                     let index = birthday.index(birthday.startIndex, offsetBy: 5)
                     self.birthday.text = String(birthday[index...])
                     let gender = ["": "Not set", "男": "Male", "女": "Female"]
-                    self.gender.text = gender[data["sex"] as? String ?? ""]
+                    self.gender.text = gender[data["sex"] as? String ?? ""]?.localized
                     let location = data["place"] as? String ?? ""
-                    self.location.text = location == "" ? "Not set" : location
+                    self.location.text = location == "" ? "Not set".localized : location
                     
                     if let timeResult = data["regtime"] as? Int {
                         let date = NSDate(timeIntervalSince1970: TimeInterval(timeResult))
@@ -219,39 +205,36 @@ class UserSearchController: UITableViewController {
                         self.regdate.text = localDate
                     }
                 } else {
-                    self.birthday.text = "Secret"
-                    self.gender.text = "Secret"
-                    self.location.text = "Secret"
-                    self.regdate.text = "Secret"
+                    self.birthday.text = "Secret".localized
+                    self.gender.text = "Secret".localized
+                    self.location.text = "Secret".localized
+                    self.regdate.text = "Secret".localized
                 }
-                self.totalview.text = String(data["playNum"] as! Int)
-                self.badge.text = data["fans_badge"] as! Bool ? "Available" : "Not Available"
+                self.totalview.text = intToString(data["playNum"])
+                if let badge = data["fans_badge"] as? Bool {
+                    self.badge.text = (badge ? "Available" : "Not Available").localized
+                }
                 enableInteraction();
+            } else {
+                self.upName.text = "(Unknown)".localized
+                let alertController = UIAlertController(title: "Error".localized, message:
+                    "This user does not exist.".localized, preferredStyle: UIAlertControllerStyle.alert)
+                alertController.addAction(UIAlertAction(title: "OK".localized, style: UIAlertActionStyle.default, handler: nil))
+                self.present(alertController, animated: true, completion: nil)
             }
         } else if type == "video_amount" {
-            if json["code"] as! Int != 0 {
-                //self.videoName.text = "Video not found"
-            } else {
-                let data = json["data"] as! [String: Any?]
-                self.videoamount.text = String(data["video"] as? Int ?? 0)
+            if let code = json["code"] as? Int, code == 0,
+                let data = json["data"] as? [String: Any?] {
+                self.videoamount.text = intToString(data["video"])
                 enableInteraction();
             }
         } else if type == "follow_amount" {
-            if json["code"] as! Int != 0 {
-                //self.videoName.text = "Video not found"
-            } else {
-                let data = json["data"] as! [String: Any?]
-                self.following.text = String(data["following"] as? Int ?? 0)
-                self.follower.text = String(data["follower"] as? Int ?? 0)
+            if let code = json["code"] as? Int, code == 0,
+                let data = json["data"] as? [String: Any?] {
+                self.following.text = intToString(data["following"])
+                self.follower.text = intToString(data["follower"])
                 enableInteraction();
             }
-        }
-    }
-    
-    func setImage(_ image_view: UIImageView, _ urlstr: String?) {
-        if let url = urlstr, let imgurl = URL(string: url),
-            let img = try? Data(contentsOf: imgurl){
-            image_view.image = UIImage(data: img)
         }
     }
     

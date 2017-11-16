@@ -54,7 +54,7 @@ class UserLevelInfoView: UIView {
         let levelNSText = NSAttributedString(string: levelText, attributes: attr)
         levelNSText.draw(at: CGPoint(x: 10, y: 2))
         
-        let expText = (nextExp != nil) ? (String(curExp) + "/" + String(nextExp)) : (String(curExp) + " (Max Level)")
+        let expText = (nextExp != nil) ? (String(curExp) + "/" + String(nextExp)) : (String(curExp) + " (Max Level)".localized)
         let expNSText = NSAttributedString(string: expText, attributes: attr)
         expNSText.draw(at: CGPoint(x: 10 + height * 2, y: 2))
     }

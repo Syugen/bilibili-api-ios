@@ -9,42 +9,37 @@
 import UIKit
 
 class SettingsController: UITableViewController {
+    
     @IBOutlet weak var mySwitch: UISwitch!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-        if !FavoriteDB.sharedInstance.downloadImage {
+        if !DB.shared.downloadImage {
             self.mySwitch.setOn(false, animated: false)
         }
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 1 {
+        if indexPath.section == 2 {
             if indexPath.row == 0 {
-                let alertController = UIAlertController(title: "Are you sure?", message:
-                    "Do you really want to remove all favorite videos in your collection?", preferredStyle: UIAlertControllerStyle.alert)
-                alertController.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.destructive, handler: {
+                let alertController = UIAlertController(title: "", message:
+                    "Do you really want to remove all favorite videos in your collection?".localized, preferredStyle: UIAlertControllerStyle.alert)
+                alertController.addAction(UIAlertAction(title: "Yes".localized, style: UIAlertActionStyle.destructive, handler: {
                     (action) -> Void in
-                    FavoriteDB.sharedInstance.removeVideos()
+                    DB.shared.removeVideos()
                 }))
-                alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+                alertController.addAction(UIAlertAction(title: "Cancel".localized, style: UIAlertActionStyle.cancel, handler: nil))
                 self.present(alertController, animated: true, completion: nil)
                 tableView.deselectRow(at: indexPath, animated: true)
             } else if indexPath.row == 1 {
-                let alertController = UIAlertController(title: "Are you sure?", message:
-                    "Do you really want to remove all favorite users in your collection?", preferredStyle: UIAlertControllerStyle.alert)
-                alertController.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.destructive, handler: {
+                let alertController = UIAlertController(title: "", message:
+                    "Do you really want to remove all favorite users in your collection?".localized, preferredStyle: UIAlertControllerStyle.alert)
+                alertController.addAction(UIAlertAction(title: "Yes".localized, style: UIAlertActionStyle.destructive, handler: {
                     (action) -> Void in
-                    FavoriteDB.sharedInstance.removeUsers()
+                    DB.shared.removeUsers()
                 }))
-                alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+                alertController.addAction(UIAlertAction(title: "Cancel".localized, style: UIAlertActionStyle.cancel, handler: nil))
                 self.present(alertController, animated: true, completion: nil)
                 tableView.deselectRow(at: indexPath, animated: true)
             }
@@ -54,11 +49,11 @@ class SettingsController: UITableViewController {
     @IBAction func downloadImageSwitchChanged(_ sender: Any) {
         if let mySwitch = sender as? UISwitch {
             if mySwitch.isOn {
-                FavoriteDB.sharedInstance.downloadImage = true
+                DB.shared.downloadImage = true
             } else {
-                FavoriteDB.sharedInstance.downloadImage = false
+                DB.shared.downloadImage = false
             }
-            UserDefaults.standard.set(FavoriteDB.sharedInstance.downloadImage, forKey: DownloadImage)
+            UserDefaults.standard.set(DB.shared.downloadImage, forKey: DownloadImage)
         }
     }
     

@@ -19,15 +19,15 @@ class VideoMainController: UIViewController, UITableViewDataSource, UITableViewD
         favoriteTable.delegate = self
         favoriteTable.rowHeight = 100
         
-        NotificationCenter.default.addObserver(forName: NSNotification.Name(VideoDBChange), object: FavoriteDB.sharedInstance, queue: nil) {
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(VideoDBChange), object: DB.shared, queue: nil) {
             (NSNotification) in
-            if FavoriteDB.sharedInstance.shouldReload {
+            if DB.shared.shouldReload {
                 self.favoriteTable.reloadData()
             }
-            let videoImages = NSKeyedArchiver.archivedData(withRootObject: FavoriteDB.sharedInstance.videoImgs)
+            let videoImages = NSKeyedArchiver.archivedData(withRootObject: DB.shared.videoImgs)
             UserDefaults.standard.set(videoImages, forKey: VideoImgs)
-            UserDefaults.standard.set(FavoriteDB.sharedInstance.videoIDs, forKey: VideoIDs)
-            UserDefaults.standard.set(FavoriteDB.sharedInstance.videoTitles, forKey: VideoTitles)
+            UserDefaults.standard.set(DB.shared.videoIDs, forKey: VideoIDs)
+            UserDefaults.standard.set(DB.shared.videoTitles, forKey: VideoTitles)
         }
     }
 
@@ -37,18 +37,18 @@ class VideoMainController: UIViewController, UITableViewDataSource, UITableViewD
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Favorite Videos"
+        return "Favorite Videos".localized
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return FavoriteDB.sharedInstance.videoIDs.count
+        return DB.shared.videoIDs.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "videoReusedCell", for: indexPath) as! VideoCell
-        cell.videoID?.text = FavoriteDB.sharedInstance.videoIDs[indexPath.row]
-        cell.videoTitle?.text = FavoriteDB.sharedInstance.videoTitles[indexPath.row]
-        cell.videoImg?.image = FavoriteDB.sharedInstance.videoImgs[indexPath.row]
+        cell.videoID?.text = DB.shared.videoIDs[indexPath.row]
+        cell.videoTitle?.text = DB.shared.videoTitles[indexPath.row]
+        cell.videoImg?.image = DB.shared.videoImgs[indexPath.row]
         return cell
     }
     
@@ -58,18 +58,17 @@ class VideoMainController: UIViewController, UITableViewDataSource, UITableViewD
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let alertController = UIAlertController(title: "Are you sure?", message:
-                "Do you really want to remove this video?", preferredStyle: UIAlertControllerStyle.alert)
-            alertController.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.destructive, handler: {
+            let alertController = UIAlertController(title: "", message: "Do you really want to remove this video?".localized, preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "Yes".localized, style: UIAlertActionStyle.destructive, handler: {
                 (action) -> Void in
-                FavoriteDB.sharedInstance.shouldReload = false
-                FavoriteDB.sharedInstance.videoTitles.remove(at: indexPath.row)
-                FavoriteDB.sharedInstance.videoImgs.remove(at: indexPath.row)
-                FavoriteDB.sharedInstance.videoIDs.remove(at: indexPath.row)
+                DB.shared.shouldReload = false
+                DB.shared.videoTitles.remove(at: indexPath.row)
+                DB.shared.videoImgs.remove(at: indexPath.row)
+                DB.shared.videoIDs.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .fade)
-                FavoriteDB.sharedInstance.shouldReload = true
+                DB.shared.shouldReload = true
             }))
-            alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+            alertController.addAction(UIAlertAction(title: "Cancel".localized, style: UIAlertActionStyle.cancel, handler: nil))
             self.present(alertController, animated: true, completion: nil)
         }
     }

@@ -15,7 +15,7 @@ class VideoDescriptionController: UIViewController {
         super.viewDidLoad()
         
         view = self.descriptionText
-        navigationItem.title = "Description"
+        navigationItem.title = "Description".localized
         self.descriptionText.font = UIFont.systemFont(ofSize: 17)
     }
 }

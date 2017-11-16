@@ -22,12 +22,7 @@ class UserFollowController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        navigationItem.title = self.username! + "'s " + self.type
+        navigationItem.title = self.username! + ("'s " + self.type).localized
         self.tableView.rowHeight = 70
         if self.nPages > 0 {
             let urlPrefix = "http://api.bilibili.com/x/relation/" + self.type + "?vmid=" + self.uid + "&pn="
@@ -35,46 +30,30 @@ class UserFollowController: UITableViewController {
         }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-    // MARK: - Table view data source
-
     func get_request(_ type: String, _ urlstr: String) {
         let url = URL(string: urlstr)
-        let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
+        URLSession.shared.dataTask(with: url!) { (data, response, error) in
             if let data = data {
                 do {
-                    // Convert the data to JSON
-                    let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-                    DispatchQueue.main.async(execute: {
-                        self.displayInfo(type, json)
-                    })
-                }  catch let error as NSError {
+                    let json = try JSONSerialization.jsonObject(with: data, options: [])
+                    if let json = json as? [String: Any] {
+                        DispatchQueue.main.async(execute: { self.displayInfo(type, json) })
+                    }
+                } catch let error as NSError {
                     print(error.localizedDescription)
                 }
-            } else if let error = error {
-                print(error.localizedDescription)
             }
-        }
-        task.resume()
+        }.resume()
     }
     
     func displayInfo(_ type: String, _ json: [String: Any]) {
-        if json["code"] as! Int != 0 {
-            let alertController = UIAlertController(title: "Error", message:
-                "Failed to load user's following list. You may try again.", preferredStyle: UIAlertControllerStyle.alert)
-            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-            self.present(alertController, animated: true, completion: nil)
-        } else {
-            let data = json["data"] as! [String: Any?]
-            let list = data["list"] as! [[String: Any?]]
+        if let code = json["code"] as? Int, code == 0,
+            let data = json["data"] as? [String: Any?],
+            let list = data["list"] as? [[String: Any?]] {
             for item in list {
-                userIDs.append(String(item["mid"] as! Int))
-                userNames.append(item["uname"] as? String)
-                userImgs.append(item["face"] as? String)
+                userIDs.append(intToString(item["mid"]))
+                userNames.append(item["uname"] as? String ?? "(Unknown)".localized)
+                userImgs.append(item["face"] as? String ?? "(Unknown)".localized)
                 if let date = item["mtime"] as? Int {
                     let date = NSDate(timeIntervalSince1970: TimeInterval(date))
                     let dateFormatter = DateFormatter()
@@ -83,6 +62,10 @@ class UserFollowController: UITableViewController {
                     dates.append(localDate)
                 }
             }
+        } else {
+            let alertController = UIAlertController(title: "Error".localized, message: String(format: "Failed to load user's %@ list. You may try again.".localized, self.type), preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "OK".localized, style: UIAlertActionStyle.default, handler: nil))
+            self.present(alertController, animated: true, completion: nil)
         }
         /*
         if Int(type)! < min(5, self.nPages) {
@@ -94,18 +77,16 @@ class UserFollowController: UITableViewController {
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return self.userIDs.count
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if self.nPages > 1 {
-            return "Only shows first 100 results"
+            return "Only shows first 100 results".localized
         } else {
             return ""
         }
@@ -116,7 +97,7 @@ class UserFollowController: UITableViewController {
         cell.uid = self.userIDs[indexPath.row]
         cell.userName?.text = self.userNames[indexPath.row]
         cell.date?.text = self.dates[indexPath.row]
-        if FavoriteDB.sharedInstance.downloadImage, let urlstr = self.userImgs[indexPath.row] {
+        if DB.shared.downloadImage, let urlstr = self.userImgs[indexPath.row] {
             let url = URL(string: urlstr)
             let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
                 if let data = data {

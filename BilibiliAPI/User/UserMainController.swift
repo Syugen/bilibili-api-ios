@@ -19,15 +19,15 @@ class UserMainController: UIViewController, UITableViewDataSource, UITableViewDe
         favoriteTable.delegate = self
         favoriteTable.rowHeight = 70
         
-        NotificationCenter.default.addObserver(forName: NSNotification.Name(UserDBChange), object: FavoriteDB.sharedInstance, queue: nil) {
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(UserDBChange), object: DB.shared, queue: nil) {
             (NSNotification) in
-            if FavoriteDB.sharedInstance.shouldReload {
+            if DB.shared.shouldReload {
                 self.favoriteTable.reloadData()
             }
-            let userImages = NSKeyedArchiver.archivedData(withRootObject: FavoriteDB.sharedInstance.userImgs)
+            let userImages = NSKeyedArchiver.archivedData(withRootObject: DB.shared.userImgs)
             UserDefaults.standard.set(userImages, forKey: UserImgs)
-            UserDefaults.standard.set(FavoriteDB.sharedInstance.userIDs, forKey: UserIDs)
-            UserDefaults.standard.set(FavoriteDB.sharedInstance.userNames, forKey: UserNames)
+            UserDefaults.standard.set(DB.shared.userIDs, forKey: UserIDs)
+            UserDefaults.standard.set(DB.shared.userNames, forKey: UserNames)
         }
     }
 
@@ -39,18 +39,18 @@ class UserMainController: UIViewController, UITableViewDataSource, UITableViewDe
     // MARK: - Table view data source
 
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Favorite Users"
+        return "Favorite Users".localized
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return FavoriteDB.sharedInstance.userIDs.count
+        return DB.shared.userIDs.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "userReusedCell", for: indexPath) as! UserCell
-        cell.userID?.text = FavoriteDB.sharedInstance.userIDs[indexPath.row]
-        cell.userName?.text = FavoriteDB.sharedInstance.userNames[indexPath.row]
-        cell.userImg?.image = FavoriteDB.sharedInstance.userImgs[indexPath.row]
+        cell.userID?.text = DB.shared.userIDs[indexPath.row]
+        cell.userName?.text = DB.shared.userNames[indexPath.row]
+        cell.userImg?.image = DB.shared.userImgs[indexPath.row]
         return cell
     }
     
@@ -60,18 +60,17 @@ class UserMainController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let alertController = UIAlertController(title: "Are you sure?", message:
-                "Do you really want to remove this user?", preferredStyle: UIAlertControllerStyle.alert)
-            alertController.addAction(UIAlertAction(title: "Yes", style: UIAlertActionStyle.destructive, handler: {
+            let alertController = UIAlertController(title: "", message: "Do you really want to remove this user?".localized, preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "Yes".localized, style: UIAlertActionStyle.destructive, handler: {
                 (action) -> Void in
-                FavoriteDB.sharedInstance.shouldReload = false
-                FavoriteDB.sharedInstance.userNames.remove(at: indexPath.row)
-                FavoriteDB.sharedInstance.userImgs.remove(at: indexPath.row)
-                FavoriteDB.sharedInstance.userIDs.remove(at: indexPath.row)
+                DB.shared.shouldReload = false
+                DB.shared.userNames.remove(at: indexPath.row)
+                DB.shared.userImgs.remove(at: indexPath.row)
+                DB.shared.userIDs.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .fade)
-                FavoriteDB.sharedInstance.shouldReload = true
+                DB.shared.shouldReload = true
             }))
-            alertController.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+            alertController.addAction(UIAlertAction(title: "Cancel".localized, style: UIAlertActionStyle.cancel, handler: nil))
             self.present(alertController, animated: true, completion: nil)
         }
     }

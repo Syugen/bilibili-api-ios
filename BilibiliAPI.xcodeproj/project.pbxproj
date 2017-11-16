@@ -17,6 +17,8 @@
 		18669FEC1FBAD44500CFD099 /* VideoDescriptionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18669FEB1FBAD44500CFD099 /* VideoDescriptionController.swift */; };
 		18669FEE1FBB59B400CFD099 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18669FED1FBB59B400CFD099 /* SettingsController.swift */; };
 		18669FF01FBB631400CFD099 /* UserVideoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18669FEF1FBB631400CFD099 /* UserVideoController.swift */; };
+		187438FE1FBD131100D1C751 /* SettingsLanguageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 187438FD1FBD131100D1C751 /* SettingsLanguageController.swift */; };
+		187439081FBD265D00D1C751 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 1874390A1FBD265D00D1C751 /* Localizable.strings */; };
 		18AB999E1FA58C9A002526A0 /* WebKitController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18AB999D1FA58C9A002526A0 /* WebKitController.swift */; };
 		18BF57E81FB8E0F90034E4A2 /* favoriteDB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BF57E71FB8E0F90034E4A2 /* favoriteDB.swift */; };
 		18BF57EC1FB8E8290034E4A2 /* VideoMainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BF57EB1FB8E8290034E4A2 /* VideoMainController.swift */; };
@@ -39,6 +41,10 @@
 		18669FEB1FBAD44500CFD099 /* VideoDescriptionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoDescriptionController.swift; sourceTree = "<group>"; };
 		18669FED1FBB59B400CFD099 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SettingsController.swift; path = BilibiliAPI/SettingsController.swift; sourceTree = SOURCE_ROOT; };
 		18669FEF1FBB631400CFD099 /* UserVideoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserVideoController.swift; sourceTree = "<group>"; };
+		187438FB1FBD04E200D1C751 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
+		187438FC1FBD04E300D1C751 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
+		187438FD1FBD131100D1C751 /* SettingsLanguageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsLanguageController.swift; sourceTree = "<group>"; };
+		187439091FBD265D00D1C751 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		18AB999D1FA58C9A002526A0 /* WebKitController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebKitController.swift; sourceTree = "<group>"; };
 		18BF57E71FB8E0F90034E4A2 /* favoriteDB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = favoriteDB.swift; sourceTree = "<group>"; };
 		18BF57EB1FB8E8290034E4A2 /* VideoMainController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoMainController.swift; sourceTree = "<group>"; };
@@ -82,11 +88,13 @@
 				1866574C1F92A9680001E2F6 /* Main.storyboard */,
 				18BF57E71FB8E0F90034E4A2 /* favoriteDB.swift */,
 				18669FED1FBB59B400CFD099 /* SettingsController.swift */,
+				187438FD1FBD131100D1C751 /* SettingsLanguageController.swift */,
 				18C312601FBAB5B70059BBEE /* Video */,
 				18C3125F1FBAB58F0059BBEE /* User */,
 				1866574F1F92A9680001E2F6 /* Assets.xcassets */,
 				186657511F92A9680001E2F6 /* LaunchScreen.storyboard */,
 				186657541F92A9680001E2F6 /* Info.plist */,
+				1874390A1FBD265D00D1C751 /* Localizable.strings */,
 			);
 			path = BilibiliAPI;
 			sourceTree = "<group>";
@@ -176,6 +184,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				186657531F92A9680001E2F6 /* LaunchScreen.storyboard in Resources */,
+				187439081FBD265D00D1C751 /* Localizable.strings in Resources */,
 				186657501F92A9680001E2F6 /* Assets.xcassets in Resources */,
 				1866574E1F92A9680001E2F6 /* Main.storyboard in Resources */,
 			);
@@ -195,6 +204,7 @@
 				186657471F92A9670001E2F6 /* AppDelegate.swift in Sources */,
 				18BF57E81FB8E0F90034E4A2 /* favoriteDB.swift in Sources */,
 				18FDBF151F94270E00F95B9C /* VideoSearchController.swift in Sources */,
+				187438FE1FBD131100D1C751 /* SettingsLanguageController.swift in Sources */,
 				18669FEC1FBAD44500CFD099 /* VideoDescriptionController.swift in Sources */,
 				18BF57EC1FB8E8290034E4A2 /* VideoMainController.swift in Sources */,
 				18BF57F21FB94B4D0034E4A2 /* UserMainController.swift in Sources */,
@@ -212,6 +222,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				1866574D1F92A9680001E2F6 /* Base */,
+				187438FB1FBD04E200D1C751 /* zh-Hans */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -220,8 +231,17 @@
 			isa = PBXVariantGroup;
 			children = (
 				186657521F92A9680001E2F6 /* Base */,
+				187438FC1FBD04E300D1C751 /* zh-Hans */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		1874390A1FBD265D00D1C751 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				187439091FBD265D00D1C751 /* zh-Hans */,
+			);
+			name = Localizable.strings;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -231,6 +251,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -288,6 +309,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

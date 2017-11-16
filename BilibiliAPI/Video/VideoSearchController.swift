@@ -37,7 +37,6 @@ class VideoSearchController: UITableViewController {
     let searchBar = UISearchBar()
     var searchButtonPressed = false
     var info_set = false
-    var DNE = false
     var aid: String!
     var uid: String!
 
@@ -54,7 +53,7 @@ class VideoSearchController: UITableViewController {
         self.statTable.isHidden = true
         self.favoriteIcon.addTarget(self, action: #selector(favoritePressed), for: UIControlEvents.touchUpInside)
         
-        let searchButton = UIBarButtonItem(title: "Search", style: .plain, target: self, action: #selector(searchPressed))
+        let searchButton = UIBarButtonItem(title: "Search".localized, style: .plain, target: self, action: #selector(searchPressed))
         self.navigationItem.setRightBarButton(searchButton, animated: true)
         reset_views()
         if self.searchButtonPressed {
@@ -84,7 +83,6 @@ class VideoSearchController: UITableViewController {
         self.copyright.text = ""
         self.info_set = false
         self.uid = nil
-        self.DNE = false
         self.videoTitleCell.isUserInteractionEnabled = false
         self.uploaderCell.isUserInteractionEnabled = false
         self.descriptionCell.isUserInteractionEnabled = false
@@ -100,23 +98,23 @@ class VideoSearchController: UITableViewController {
     }
     
     @objc func favoritePressed() {
-        if let index = FavoriteDB.sharedInstance.videoIDs.index(of: self.aid) {
+        if let index = DB.shared.videoIDs.index(of: self.aid) {
             self.favoriteIcon.setImage(UIImage(named: "notfavorite"), for: UIControlState.normal)
-            FavoriteDB.sharedInstance.videoTitles.remove(at: index)
-            FavoriteDB.sharedInstance.videoImgs.remove(at: index)
-            FavoriteDB.sharedInstance.videoIDs.remove(at: index)
-            let alertController = UIAlertController(title: "Favorite removed", message:
-                "This video has been removed from your favorite collection.", preferredStyle: UIAlertControllerStyle.alert)
-            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            DB.shared.videoTitles.remove(at: index)
+            DB.shared.videoImgs.remove(at: index)
+            DB.shared.videoIDs.remove(at: index)
+            let alertController = UIAlertController(title: "Favorite removed".localized, message:
+                "This video has been removed from your favorite collection.".localized, preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "OK".localized, style: UIAlertActionStyle.default, handler: nil))
             self.present(alertController, animated: true, completion: nil)
         } else {
             self.favoriteIcon.setImage(UIImage(named: "favorite"), for: UIControlState.normal)
-            FavoriteDB.sharedInstance.videoTitles.append(self.videoName.text)
-            FavoriteDB.sharedInstance.videoImgs.append(self.videoImage.image)
-            FavoriteDB.sharedInstance.videoIDs.append(self.aid)
-            let alertController = UIAlertController(title: "Favorite added", message:
-                "This video has been added to your favorite collection.", preferredStyle: UIAlertControllerStyle.alert)
-            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            DB.shared.videoTitles.append(self.videoName.text)
+            DB.shared.videoImgs.append(self.videoImage.image)
+            DB.shared.videoIDs.append(self.aid)
+            let alertController = UIAlertController(title: "Favorite added".localized, message:
+                "This video has been added to your favorite collection.".localized, preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "OK".localized, style: UIAlertActionStyle.default, handler: nil))
             self.present(alertController, animated: true, completion: nil)
         }
     }
@@ -127,142 +125,122 @@ class VideoSearchController: UITableViewController {
         
         self.aid = self.searchBar.text
         if Int(self.aid) == nil {
-            let alertController = UIAlertController(title: "Error", message:
-                "Video ID should be an integer", preferredStyle: UIAlertControllerStyle.alert)
-            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            let alertController = UIAlertController(title: "Error".localized, message:
+                "Video ID should be an integer".localized, preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "OK".localized, style: UIAlertActionStyle.default, handler: nil))
             self.present(alertController, animated: true, completion: nil)
         } else {
             self.statTable.isHidden = false
-            self.videoName.text = "Searching video ID " + self.aid
-            if FavoriteDB.sharedInstance.videoIDs.contains(self.aid) {
+            if DB.shared.videoIDs.contains(self.aid) {
                 self.favoriteIcon.setImage(UIImage(named: "favorite"), for: UIControlState.normal)
             }
-            get_request("bili_video", "https://api.bilibili.com/archive_stat/stat?aid=" + self.searchBar.text!)
-            get_request("jiji_video", "http://www.jijidown.com/Api/AvToCid/" + self.aid)
-            get_request("webpage", "http://bili.utoptutor.com/videopage?aid=" + self.aid)
+            getRequest("bili_video", "api.bilibili.com", "https://api.bilibili.com/archive_stat/stat?aid=" + self.searchBar.text!)
+            getRequest("jiji_video", "www.jijidown.com", "http://www.jijidown.com/Api/AvToCid/" + self.aid)
+            getRequest("webpage", "bilibili.com webpage", "http://bili.utoptutor.com/videopage?aid=" + self.aid)
         }
     }
     
-    func get_request(_ type: String, _ urlstr: String) {
+    func getRequest(_ type: String, _ site: String, _ urlstr: String) {
         let url = URL(string: urlstr)
-        let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
+        URLSession.shared.dataTask(with: url!) { (data, response, error) in
             if let data = data {
                 do {
-                    // Convert the data to JSON
-                    let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-                    DispatchQueue.main.async(execute: {
-                        self.displayInfo(type, json)
-                    })
-                }  catch let error as NSError {
-                    print(error.localizedDescription)
+                    let json = try JSONSerialization.jsonObject(with: data, options: [])
+                    if let json = json as? [String: Any] {
+                        DispatchQueue.main.async(execute: { self.displayInfo(type, json) })
+                    }
+                } catch _ as NSError {
+                    let alertController = UIAlertController(title: "Error".localized, message:
+                        String(format: "Unfortunately, the JSON data returned by %@ is malformed, so it cannot be processed".localized, site), preferredStyle: UIAlertControllerStyle.alert)
+                    alertController.addAction(UIAlertAction(title: "OK".localized, style: UIAlertActionStyle.default, handler: nil))
+                    self.present(alertController, animated: true, completion: nil)
                 }
-            } else if let error = error {
-                print(error.localizedDescription)
             }
-        }
-        task.resume()
+        }.resume()
     }
     
     func displayInfo(_ type: String, _ json: [String: Any]) {
         if type == "bili_video" {
-            if json["code"] as! Int != 0 {
-                self.videoName.text = "Video doesn't exist"
-                self.DNE = true
+            if let code = json["code"] as? Int, code == 0,
+                let data = json["data"] as? [String: Any?] {
+                self.viewCount.text = intToString(data["view"])
+                self.danmakuCount.text = intToString(data["danmaku"])
+                self.replyCount.text = intToString(data["reply"])
+                self.favoriteCount.text = intToString(data["favorite"])
+                self.coinCount.text = intToString(data["coin"])
+                self.ShareCount.text = intToString(data["share"])
+                let curRank = intToString(data["now_rank"])
+                let hisRank = intToString(data["his_rank"])
+                let cp = intToString(data["copyright"])
+                self.curRanking.text = curRank == "0" ? ">100" : curRank
+                self.hisRanking.text = hisRank == "0" ? ">1000" : hisRank
+                self.copyright.text = cp == "0" ? "No" : (cp == "1" ? "Yes" : cp)
             } else {
-                let data = json["data"] as! [String: Any?]
-                self.viewCount.text = String(data["view"] as? Int ?? 0)
-                self.danmakuCount.text = String(data["danmaku"] as? Int ?? 0)
-                self.replyCount.text = String(data["reply"] as? Int ?? 0)
-                self.favoriteCount.text = String(data["favorite"] as? Int ?? 0)
-                self.coinCount.text = String(data["coin"] as? Int ?? 0)
-                self.ShareCount.text = String(data["share"] as? Int ?? 0)
-                let curRankInt = data["now_rank"] as? Int ?? 0
-                let hisRankInt = data["his_rank"] as? Int ?? 0
-                let copyrightInt = data["copyright"] as? Int ?? 0
-                self.curRanking.text = curRankInt == 0 ? ">100" :  String(curRankInt)
-                self.hisRanking.text = hisRankInt == 0 ? ">1000" :  String(hisRankInt)
-                self.copyright.text = copyrightInt == 1 ? "Yes" : "No"
+                self.videoName.text = "(Unknown)".localized
+                let alertController = UIAlertController(title: "Error".localized, message:
+                    "This video does not exist.".localized, preferredStyle: UIAlertControllerStyle.alert)
+                alertController.addAction(UIAlertAction(title: "OK".localized, style: UIAlertActionStyle.default, handler: nil))
+                self.present(alertController, animated: true, completion: nil)
             }
         } else if type == "jiji_video" {
-            if json["code"] as! Int != 0 /*|| json["maxpage"] as! Int == 0*/ {
-                // TODO: set videoimage as defaulf "not found" image
-                return
-            } else {
+            if let code = json["code"] as? Int, code == 0 {
+                print(self.info_set)
                 if self.info_set == false {
                     self.info_set = true
-                    if !self.DNE {
-                        self.videoName.text = json["title"] as? String ?? "Video may be deleted"
-                        self.favoriteIcon.isHidden = false
-                        self.videoTitleCell.isUserInteractionEnabled = true
-                        self.videoTitleCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
-                    }
-                    self.upName.text = json["up"] as? String
-                    self.desc.text = json["desc"] as? String
-                    if FavoriteDB.sharedInstance.downloadImage {
-                        self.setImage(self.upImage, json["upimg"] as? String)
-                    }
-                    self.descriptionCell.isUserInteractionEnabled = true
-                    self.descriptionCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
-                }
-                if FavoriteDB.sharedInstance.downloadImage {
-                    self.setImage(self.videoImage, json["img"] as? String)
-                }
-            }
-        } else if type == "webpage" {
-            if json["error"] as? Bool == true {
-                //self.upsign.text = "Failed to uploader infomation"
-                return
-            } else {
-                if self.info_set == false {
-                    self.info_set = true
-                    if !self.DNE {
-                        self.videoName.text = json["title"] as? String
-                        self.favoriteIcon.isHidden = false
-                        self.videoTitleCell.isUserInteractionEnabled = true
-                        self.videoTitleCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
-                    }
-                    self.upName.text = json["upName"] as? String
-                    self.desc.text = json["description"] as? String
-                    if FavoriteDB.sharedInstance.downloadImage {
-                        self.setImage(self.upImage, json["upAvatar"] as? String)
+                    self.videoName.text = json["title"] as? String ?? "(Unknown)".localized
+                    self.upName.text = json["up"] as? String ?? "(Unknown)".localized
+                    self.desc.text = json["desc"] as? String ?? "(Unknown)".localized
+                    if DB.shared.downloadImage {
+                        setImage(self.upImage, json["upimg"] as? String)
                     }
                     self.favoriteIcon.isHidden = false
                     self.videoTitleCell.isUserInteractionEnabled = true
-                    self.descriptionCell.isUserInteractionEnabled = true
                     self.videoTitleCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+                    self.descriptionCell.isUserInteractionEnabled = true
                     self.descriptionCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
                 }
-                let sign = json["upSign"] as? String
-                self.upsign.text = sign == "" ? "Signature not set" : sign
+                if DB.shared.downloadImage {
+                    setImage(self.videoImage, json["img"] as? String)
+                }
+            }
+        } else if type == "webpage" {
+            if let error = json["error"] as? Bool, !error {
+                if self.info_set == false {
+                    self.info_set = true
+                    self.videoName.text = json["title"] as? String ?? "(Unknown)".localized
+                    self.upName.text = json["upName"] as? String ?? "(Unknown)".localized
+                    self.desc.text = json["description"] as? String ?? "(Unknown)".localized
+                    if DB.shared.downloadImage {
+                        setImage(self.upImage, json["upAvatar"] as? String)
+                    }
+                    self.favoriteIcon.isHidden = false
+                    self.videoTitleCell.isUserInteractionEnabled = true
+                    self.videoTitleCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+                    self.descriptionCell.isUserInteractionEnabled = true
+                    self.descriptionCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+                }
+                let sign = json["upSign"] as? String ?? "(Unknown)".localized
+                self.upsign.text = sign == "" ? "Signature not set".localized : sign
                 
-                self.uid = json["uid"] as! String
-                get_request("video_amount", "http://api.bilibili.com/x/space/navnum?mid=" + self.uid)
-                get_request("follow_amount", "http://api.bilibili.com/x/relation/stat?vmid=" + self.uid)
-                self.uploaderCell.isUserInteractionEnabled = true
-                self.uploaderCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+                if let uid = json["uid"] as? String {
+                    self.uid = uid
+                    getRequest("video_amount", "api.bilibili.com", "http://api.bilibili.com/x/space/navnum?mid=" + uid)
+                    getRequest("follow_amount", "api.bilibili.com", "http://api.bilibili.com/x/relation/stat?vmid=" + uid)
+                    self.uploaderCell.isUserInteractionEnabled = true
+                    self.uploaderCell.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
+                }
             }
         } else if type == "video_amount" {
-            if json["code"] as! Int != 0 {
-                //self.videoName.text = "Video not found"
-            } else {
-                let data = json["data"] as! [String: Any?]
-                self.videoamount.text = "(" + String(data["video"] as? Int ?? 0) + " videos)"
+            if let code = json["code"] as? Int, code == 0,
+                let data = json["data"] as? [String: Any?] {
+                self.videoamount.text = "(" + intToString(data["video"]) + " videos)".localized
             }
         } else if type == "follow_amount" {
-            if json["code"] as! Int != 0 {
-                //self.videoName.text = "Video not found"
-            } else {
-                let data = json["data"] as! [String: Any?]
-                self.following.text = "Following: " + String(data["following"] as? Int ?? 0)
-                self.follower.text = "Follower: " + String(data["follower"] as? Int ?? 0)
+            if let code = json["code"] as? Int, code == 0,
+                let data = json["data"] as? [String: Any?] {
+                self.following.text = "Following: ".localized + intToString(data["following"])
+                self.follower.text = "Follower: ".localized + intToString(data["follower"])
             }
-        }
-    }
-    
-    func setImage(_ image_view: UIImageView, _ urlstr: String?) {
-        if let url = urlstr, let imgurl = URL(string: url) {
-            let img = try? Data(contentsOf: imgurl)
-            image_view.image = UIImage(data: img!)
         }
     }
     
@@ -285,13 +263,7 @@ class VideoSearchController: UITableViewController {
         }
     }
     
-    
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
         if segue.identifier == "videoTitle" {
             let vcDest = segue.destination as! WebKitController
             vcDest.videoTitle = self.videoName.text
@@ -302,7 +274,8 @@ class VideoSearchController: UITableViewController {
                 vcDest.searchBar.text = self.uid
                 vcDest.searchButtonPressed = true
             } else {
-                let alertController = UIAlertController(title: "Cannot visit", message:
+                // Based on current implementation, this alert should never be triggered.
+                let alertController = UIAlertController(title: "Error".localized, message:
                     "This video is probably a movie or an episode of a bangumi, and its webpage layout is different from a usual one, thus the user ID of the uploader is not loaded, thus unable to view their profile.", preferredStyle: UIAlertControllerStyle.alert)
                 alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
                 self.present(alertController, animated: true, completion: nil)

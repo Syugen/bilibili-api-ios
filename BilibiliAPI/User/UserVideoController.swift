@@ -21,60 +21,40 @@ class UserVideoController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
-        navigationItem.title = self.username! + "'s videos"
+        navigationItem.title = self.username! + "'s videos".localized
         self.tableView.rowHeight = 100
         if self.nPages > 0 {
-            get_request("1", "http://space.bilibili.com/ajax/member/getSubmitVideos?mid=" + self.uid + "&pagesize=100&tid=0&page=1")
+            getRequest("1", "space.bilibili.com", "http://space.bilibili.com/ajax/member/getSubmitVideos?mid=" + self.uid + "&pagesize=100&tid=0&page=1")
         }
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
-    // MARK: - Table view data source
-
-    
-    
-    func get_request(_ type: String, _ urlstr: String) {
+    func getRequest(_ type: String, _ site: String, _ urlstr: String) {
         let url = URL(string: urlstr)
-        let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
+        URLSession.shared.dataTask(with: url!) { (data, response, error) in
             if let data = data {
                 do {
-                    // Convert the data to JSON
-                    let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
-                    DispatchQueue.main.async(execute: {
-                        self.displayInfo(type, json)
-                    })
-                }  catch let error as NSError {
-                    print(error.localizedDescription)
+                    let json = try JSONSerialization.jsonObject(with: data, options: [])
+                    if let json = json as? [String: Any] {
+                        DispatchQueue.main.async(execute: { self.displayInfo(type, json) })
+                    }
+                } catch _ as NSError {
+                    let alertController = UIAlertController(title: "Error".localized, message:
+                        String(format: "Unfortunately, the JSON data returned by %@ is malformed, so it cannot be processed".localized, site), preferredStyle: UIAlertControllerStyle.alert)
+                    alertController.addAction(UIAlertAction(title: "OK".localized, style: UIAlertActionStyle.default, handler: nil))
+                    self.present(alertController, animated: true, completion: nil)
                 }
-            } else if let error = error {
-                print(error.localizedDescription)
             }
-        }
-        task.resume()
+        }.resume()
     }
     
     func displayInfo(_ type: String, _ json: [String: Any]) {
-        if json["status"] as! Bool != true {
-            let alertController = UIAlertController(title: "Error", message:
-                "Failed to load user's video list. You may try again.", preferredStyle: UIAlertControllerStyle.alert)
-            alertController.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
-            self.present(alertController, animated: true, completion: nil)
-        } else {
-            let data = json["data"] as! [String: Any?]
-            let vlist = data["vlist"] as! [[String: Any?]]
+        if let status = json["status"] as? Bool, status,
+            let data = json["data"] as? [String: Any?],
+            let vlist = data["vlist"] as? [[String: Any?]] {
             for item in vlist {
-                videoIDs.append(String(item["aid"] as! Int))
-                videoTitles.append(item["title"] as? String)
-                videoImgs.append(item["pic"] as? String)
+                videoIDs.append(intToString(item["aid"]))
+                videoTitles.append(item["title"] as? String ?? "(Unknown)".localized)
+                videoImgs.append(item["pic"] as? String ?? "(Unknown)".localized)
                 if let date = item["created"] as? Int {
                     let date = NSDate(timeIntervalSince1970: TimeInterval(date))
                     let dateFormatter = DateFormatter()
@@ -83,6 +63,10 @@ class UserVideoController: UITableViewController {
                     videoDates.append(localDate)
                 }
             }
+        } else {
+            let alertController = UIAlertController(title: "Error".localized, message: String(format: "Failed to load user's %@ list. You may try again.".localized, "video"), preferredStyle: UIAlertControllerStyle.alert)
+            alertController.addAction(UIAlertAction(title: "OK".localized, style: UIAlertActionStyle.default, handler: nil))
+            self.present(alertController, animated: true, completion: nil)
         }
         /*
         if Int(type)! < min(5, self.nPages) {
@@ -93,18 +77,16 @@ class UserVideoController: UITableViewController {
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return self.videoIDs.count
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if self.nPages > 1 {
-            return "Only shows first 100 results"
+            return "Only shows first 100 results".localized
         } else {
             return ""
         }
@@ -115,7 +97,7 @@ class UserVideoController: UITableViewController {
         cell.videoID?.text = self.videoIDs[indexPath.row]
         cell.videoTitle?.text = self.videoTitles[indexPath.row]
         cell.videoDate?.text = self.videoDates[indexPath.row]
-        if FavoriteDB.sharedInstance.downloadImage, let urlstr = self.videoImgs[indexPath.row] {
+        if DB.shared.downloadImage, let urlstr = self.videoImgs[indexPath.row] {
             let url = URL(string: "http:" + urlstr)
             let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
                 if let data = data {

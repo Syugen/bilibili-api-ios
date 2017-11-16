@@ -1,0 +1,170 @@
+
+/* Class = "UINavigationItem"; title = "User"; ObjectID = "1bo-dO-7ht"; */
+"1bo-dO-7ht.title" = "用户";
+
+/* Class = "UILabel"; text = "Gender"; ObjectID = "1lL-uQ-zp4"; */
+"1lL-uQ-zp4.text" = "性别";
+
+/* Class = "UILabel"; text = "View"; ObjectID = "273-k3-Q1m"; */
+"273-k3-Q1m.text" = "播放";
+
+/* Class = "UITabBarItem"; title = "Settings"; ObjectID = "4cV-PD-O6x"; */
+"4cV-PD-O6x.title" = "设置";
+
+/* Class = "UILabel"; text = "Danmaku"; ObjectID = "4yL-8G-7Nc"; */
+"4yL-8G-7Nc.text" = "弹幕";
+
+/* Class = "UITableViewSection"; headerTitle = "Information"; ObjectID = "6PD-j1-R6h"; */
+"6PD-j1-R6h.headerTitle" = "个人信息";
+
+/* Class = "UINavigationItem"; title = "Settings"; ObjectID = "7iy-kd-8px"; */
+"7iy-kd-8px.title" = "设置";
+
+/* Class = "UILabel"; text = "Copyright"; ObjectID = "7vU-ol-iDA"; */
+"7vU-ol-iDA.text" = "版权";
+
+/* Class = "UITabBarItem"; title = "Video"; ObjectID = "8ux-Ob-h5b"; */
+"8ux-Ob-h5b.title" = "视频";
+
+/* Class = "UILabel"; text = "Clear Favorite Videos"; ObjectID = "9ck-cL-JdB"; */
+"9ck-cL-JdB.text" = "清空收藏视频";
+
+/* Class = "UILabel"; text = "Favorite"; ObjectID = "ADA-y2-TfU"; */
+"ADA-y2-TfU.text" = "收藏";
+
+/* Class = "UITabBarItem"; title = "User"; ObjectID = "CJT-ak-83X"; */
+"CJT-ak-83X.title" = "用户";
+
+/* Class = "UILabel"; text = "Experience"; ObjectID = "DAP-Gb-IVW"; */
+"DAP-Gb-IVW.text" = "经验值";
+
+"dWY-3y-JpC.text" = "设置语言";
+
+/* Class = "UILabel"; text = "Username"; ObjectID = "FGC-MX-hgW"; */
+"FGC-MX-hgW.text" = "用户名";
+
+/* Class = "UILabel"; text = "History Ranking"; ObjectID = "FmX-Ce-e6e"; */
+"FmX-Ce-e6e.text" = "全站历史排名";
+
+/* Class = "UILabel"; text = "Video Title"; ObjectID = "GQT-Mb-lxG"; */
+"GQT-Mb-lxG.text" = "视频标题";
+
+/* Class = "UILabel"; text = "Load Images"; ObjectID = "IvI-5l-gex"; */
+"IvI-5l-gex.text" = "加载图片";
+
+/* Class = "UILabel"; text = "Video Title"; ObjectID = "MIi-XJ-zk9"; */
+"MIi-XJ-zk9.text" = "视频标题";
+
+/* Class = "UILabel"; text = "Location"; ObjectID = "OFs-Cc-LbS"; */
+"OFs-Cc-LbS.text" = "位置";
+
+/* Class = "UILabel"; text = "Following"; ObjectID = "RQ6-We-6rB"; */
+"RQ6-We-6rB.text" = "关注数";
+
+/* Class = "UILabel"; text = "Current Ranking"; ObjectID = "SAq-8z-YAS"; */
+"SAq-8z-YAS.text" = "全站当前排名";
+
+/* Class = "UITableViewSection"; headerTitle = "Description"; ObjectID = "Tly-Lv-X81"; */
+"Tly-Lv-X81.headerTitle" = "视频简介";
+
+/* Class = "UILabel"; text = "Total View"; ObjectID = "U3u-Yv-8lE"; */
+"U3u-Yv-8lE.text" = "播放数";
+
+/* Class = "UILabel"; text = "Description"; ObjectID = "URg-lb-Idp"; */
+"URg-lb-Idp.text" = "视频简介";
+
+/* Class = "UILabel"; text = "Video Title"; ObjectID = "UU7-Y0-b97"; */
+"UU7-Y0-b97.text" = "视频标题";
+
+/* Class = "UILabel"; text = "Video Title"; ObjectID = "Ubr-mJ-a1j"; */
+"Ubr-mJ-a1j.text" = "视频标题";
+
+/* Class = "UILabel"; text = "Birthday"; ObjectID = "Wcf-gC-ggN"; */
+"Wcf-gC-ggN.text" = "生日";
+
+/* Class = "UILabel"; text = "Since "; ObjectID = "Z5Z-i0-Abd"; */
+"Z5Z-i0-Abd.text" = "关注于";
+
+/* Class = "UILabel"; text = "Video Title"; ObjectID = "aCi-vI-zMC"; */
+"aCi-vI-zMC.text" = "视频标题";
+
+/* Class = "UILabel"; text = "Followers"; ObjectID = "aGl-eS-mNb"; */
+"aGl-eS-mNb.text" = "粉丝数";
+
+/* Class = "UITableViewSection"; headerTitle = "Uploader"; ObjectID = "aWE-7m-oNM"; */
+"aWE-7m-oNM.headerTitle" = "UP主";
+
+/* Class = "UINavigationController"; title = "User Navigation"; ObjectID = "cWS-r0-zZs"; */
+"cWS-r0-zZs.title" = "User Navigation";
+
+/* Class = "UILabel"; text = "Signature"; ObjectID = "cij-3s-0gA"; */
+"cij-3s-0gA.text" = "个性签名";
+
+/* Class = "UITableViewSection"; headerTitle = "Video title"; ObjectID = "dbE-jV-JZ0"; */
+"dbE-jV-JZ0.headerTitle" = "视频标题";
+
+/* Class = "UILabel"; text = "Follower"; ObjectID = "e5p-Yy-I90"; */
+"e5p-Yy-I90.text" = "粉丝数";
+
+/* Class = "UILabel"; text = "Uploader"; ObjectID = "f2o-aM-8Xj"; */
+"f2o-aM-8Xj.text" = "UP主";
+
+/* Class = "UILabel"; text = "Reply"; ObjectID = "jvI-0R-aNc"; */
+"jvI-0R-aNc.text" = "回复";
+
+/* Class = "UINavigationController"; title = "Settings Navigation"; ObjectID = "ksL-Nn-Re7"; */
+"ksL-Nn-Re7.title" = "Settings Navigation";
+
+/* Class = "UILabel"; text = "Fan's Badge"; ObjectID = "kur-K7-7FQ"; */
+"kur-K7-7FQ.text" = "粉丝徽章";
+
+/* Class = "UILabel"; text = "Following"; ObjectID = "mr4-D0-fKg"; */
+"mr4-D0-fKg.text" = "关注数";
+
+/* Class = "UILabel"; text = "Registration Time"; ObjectID = "nOV-da-10H"; */
+"nOV-da-10H.text" = "注册时间";
+
+/* Class = "UILabel"; text = "date"; ObjectID = "nd4-29-X2u"; */
+"nd4-29-X2u.text" = "日期";
+
+/* Class = "UILabel"; text = "Signature"; ObjectID = "qZI-CJ-vJD"; */
+"qZI-CJ-vJD.text" = "个性签名";
+
+/* Class = "UILabel"; text = "Clear Favorite Users"; ObjectID = "roS-er-8PA"; */
+"roS-er-8PA.text" = "清空收藏用户";
+
+/* Class = "UILabel"; text = "Search a Video"; ObjectID = "skL-A3-fRV"; */
+"skL-A3-fRV.text" = "搜索视频";
+
+/* Class = "UITableViewSection"; headerTitle = "Statistics"; ObjectID = "tZ9-UH-Lt5"; */
+"tZ9-UH-Lt5.headerTitle" = "统计信息";
+
+/* Class = "UILabel"; text = "date"; ObjectID = "uiD-mO-k0p"; */
+"uiD-mO-k0p.text" = "日期";
+
+/* Class = "UITableViewSection"; headerTitle = "More Settings Coming Soon"; ObjectID = "vWV-9d-DB7"; */
+"vWV-9d-DB7.headerTitle" = "More Settings Coming Soon";
+
+/* Class = "UILabel"; text = "Video amount"; ObjectID = "wnd-9h-kkW"; */
+"wnd-9h-kkW.text" = "视频数";
+
+/* Class = "UILabel"; text = "Videos"; ObjectID = "wta-4k-E9N"; */
+"wta-4k-E9N.text" = "视频";
+
+/* Class = "UILabel"; text = "Search a User"; ObjectID = "x17-nU-Djy"; */
+"x17-nU-Djy.text" = "搜索用户";
+
+/* Class = "UITableViewSection"; headerTitle = "Videos / Connections"; ObjectID = "xAP-YM-kJW"; */
+"xAP-YM-kJW.headerTitle" = "视频与关注";
+
+/* Class = "UITableViewSection"; headerTitle = "Uploader"; ObjectID = "xKM-c8-9d7"; */
+"xKM-c8-9d7.headerTitle" = "UP主";
+
+/* Class = "UILabel"; text = "Coin"; ObjectID = "z7c-FV-6OM"; */
+"z7c-FV-6OM.text" = "硬币";
+
+/* Class = "UINavigationItem"; title = "Video"; ObjectID = "z9z-wQ-ut6"; */
+"z9z-wQ-ut6.title" = "视频";
+
+/* Class = "UILabel"; text = "Share"; ObjectID = "zQU-bw-pzX"; */
+"zQU-bw-pzX.text" = "分享";

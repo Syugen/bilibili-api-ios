@@ -1,0 +1,12 @@
+/* 
+  Localized.strings
+  BilibiliAPI
+
+  Created by Yuan Zhou on 2017/11/15.
+  Copyright © 2017年 Yuan Zhou. All rights reserved.
+*/
+
+"FAVORITE_VIDEOS" = "Favorite Videos"
+"FAVORITE_USERS" = "Favorite Users"
+"REMOVE_VIDEO_CONFIRM" = "Do you really want to remove this video?"
+"REMOVE_USER_CONFIRM" = "Do you really want to remove this user?"

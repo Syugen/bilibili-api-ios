@@ -1,0 +1,49 @@
+/* 
+  Localizable.strings
+  BilibiliAPI
+
+  Created by Yuan Zhou on 2017/11/15.
+  Copyright © 2017年 Yuan Zhou. All rights reserved.
+*/
+
+"Favorite Videos" = "收藏视频";
+"Favorite Users" = "收藏用户";
+"Do you really want to remove this video?" = "确定从收藏夹删除该视频？";
+"Do you really want to remove this user?" = "确定从收藏夹删除该用户？";
+"Yes" = "确定";
+"Cancel" = "取消";
+"Error" = "错误";
+"Search" = "搜索";
+"Video ID should be an integer" = "av号应为正整数";
+"Favorite removed" = "收藏已删除";
+"This video has been removed from your favorite collection." = "已从收藏夹删除该视频";
+"This user has been removed from your favorite collection." = "已从收藏夹删除该用户";
+"Favorite added" = "收藏已添加";
+"This video has been added to your favorite collection." = "已添加该视频到收藏夹";
+"This user has been added to your favorite collection." = "已添加该用户到收藏夹";
+"OK" = "知道了";
+"Unfortunately, the JSON data returned by %@ is malformed, so it cannot be processed" = "由于%@返回的JSON数据格式不正确，无法处理数据";
+"This video does not exist." = "该视频不存在";
+"This user does not exist." = "该用户不存在";
+"(Unknown)" = "（未知）";
+"Signature not set" = "未设置个性签名";
+"Following: " = "关注数：";
+"Follower: " = "粉丝数：";
+"videos)" = "个视频)";
+"Description" = "视频简介";
+"Not set" = "未设置";
+"Male" = "男";
+"Female" = "女";
+"Secret" = "未公开";
+"Available" = "已开通";
+"Not Available" = "未开通";
+" (Max Level)" = " (已满级)";
+"'s videos" = "的视频";
+"'s followers" = "的粉丝";
+"'s followings" = "的关注";
+"Failed to load user's %@ list. You may try again." = "读取%@列表失败。请重试。";
+"Only shows first 100 results" = "仅显示前100条结果";
+"Do you really want to remove all favorite videos in your collection?" = "确定删除收藏夹所有视频？";
+"Do you really want to remove all favorite users in your collection?" = "确定删除收藏夹所有用户";
+"Language is reset" = "语言已重置";
+"Sorry for the inconvenience, but for current version, you need to restart the app manually to display new language." = "当前版本需重启本应用才能显示新语言，由此造成的不便请谅解";

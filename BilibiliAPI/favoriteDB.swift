@@ -20,8 +20,29 @@ let UserImgs = "USER_IMGS"
 let UserIDs = "USER_IDS"
 let UserNames = "USER_NAMES"
 
-class FavoriteDB {
-    static var sharedInstance = FavoriteDB()
+extension String {
+    var localized: String {
+        return NSLocalizedString(self, tableName: nil, bundle: Bundle.main, value: "", comment: "")
+    }
+}
+
+func intToString(_ value: Any??) -> String {
+    if let value = value as? Int {
+        return String(value)
+    } else {
+        return "(Unknown)"
+    }
+}
+
+func setImage(_ image_view: UIImageView, _ urlstr: String?) {
+    if let url = urlstr, let imgurl = URL(string: url),
+        let img = try? Data(contentsOf: imgurl){
+        image_view.image = UIImage(data: img)
+    }
+}
+
+class DB {
+    static var shared = DB()
     
     var shouldReload: Bool = true
     
